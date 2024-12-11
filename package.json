@@ -1,0 +1,23 @@
+{
+  "name": "fun-stuff",
+  "version": "1.0.0",
+  "description": "A place for small experiments and toys",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/p5": "^1.7.6",
+    "vite": "^5.4.11",
+    "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "p5": "^1.11.2"
+  }
+}
