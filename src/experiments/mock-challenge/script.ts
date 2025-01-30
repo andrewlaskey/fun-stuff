@@ -16,3 +16,4 @@ function calculateArea(shape: Shape): number {
             throw new Error(`Invalid shape ${exhaustiveCheck}`);
     }
 }
+

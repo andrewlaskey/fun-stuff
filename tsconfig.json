@@ -11,9 +11,11 @@
       "paths": {
         "@components/*": ["src/components/*"]
       },
-      "types": ["p5"]
+      "types": ["p5"],
+      "allowJs": true,
+      "checkJs": false
     },
-    "include": ["src/**/*", "tests/**/*"],
-    "exclude": ["node_modules"]
-  }
+  "include": ["src/**/*", "tests/**/*"],
+  "exclude": ["node_modules"]
+}
   

@@ -8,7 +8,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: './src/index.html', // Default entry point
-        tunnel: './src/experiments/flashing-tunnel/index.html'
+        tunnel: './src/experiments/flashing-tunnel/index.html',
+        mellings: './src/experiments/mellings/index.html'
       },
     },
   },
