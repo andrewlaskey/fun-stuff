@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mellings</title>
+  <style>
+    html, body {margin: 0; height: 100%; overflow: hidden}
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+    .avatar {
+        position: relative;
+    }
+    .face,
+    .hair,
+    .beard,
+    .nose,
+    .eyes,
+    .mouth {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .nose {
+        transform: translateX(-10%);
+    }
+
+    .beard {
+        transform: translateX(-5%);
+    }
+
+  </style>
+</head>
+<body>
+    <div id="app"></div>
+    <div class="avatar">
+        <img class="face" src="./avatar_shapes/faces/face_4.png" />
+        <img class="hair" src="./avatar_shapes/hair/hair_1.png" />
+        <img class="beard" src="./avatar_shapes/beards/beard_3.png" />
+        <img class="nose" src="./avatar_shapes/noses/nose_4.png" />
+        <img class="eyes" src="./avatar_shapes/eyes/eye_3.png" />
+        <img class="mouth" src="./avatar_shapes/mouths/mouth_2.png" />
+    </div>
+    <script type="module" src="./scripts.ts"></script>
+</body>
+</html>
