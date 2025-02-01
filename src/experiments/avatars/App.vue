@@ -20,6 +20,7 @@ const inputName = ref('');
 }
 
 .text-input {
+    position: relative;
     padding: 0.5em 1em;
     font-size: 2em;
     border: 5px solid #74898c;

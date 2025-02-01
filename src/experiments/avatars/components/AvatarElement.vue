@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { defineProps, computed } from 'vue';
+import { defineProps, computed, onMounted, watch, useTemplateRef } from 'vue';
+import { gsap } from "gsap";
+import { debounce } from 'lodash';
 
 export interface AvatarElementProps {
     fileName: string,
@@ -7,30 +9,73 @@ export interface AvatarElementProps {
     activeIndex?: number,
     numVariants?: number,
     emptySlots?: number,
+    delay?: number
 }
+
+const DEBOUNCE_MS = 300;
 
 const {
     fileName = 'face',
     elementType = 'faces',
     activeIndex = 0,
     numVariants = 14,
-    emptySlots = 0
+    emptySlots = 0,
+    delay = 0
 } = defineProps<AvatarElementProps>();
+const variants = useTemplateRef('variants');
 
 const totalVariants = computed(() => {
     return numVariants + emptySlots;
 })
 
 const safeActiveIndex = computed(() => {
-    return (activeIndex % totalVariants.value) + 1;
+    return (activeIndex % totalVariants.value);
 })
+
+const animateVariantsFn = () => {
+    variants.value.forEach((variantEl, i) => {
+        if (gsap.isTweening(variantEl)) {
+            gsap.killTweensOf(variantEl);
+        }
+
+        if (i === safeActiveIndex.value) {
+            gsap.set(variantEl, { scale: 0.7, autoAlpha: 1 })
+            gsap.to(variantEl, {
+                delay,
+                duration: 0.25,
+                ease: "elastic.inOut(1.5,0.3)",
+                scale: 1,
+            });
+        } else {
+            const tl = gsap.timeline();
+            tl.to(variantEl,
+                {
+                    duration: 0.15,
+                    scale: 0.8,
+                    ease: "power4.out"
+                }
+            )
+            .to(variantEl, { autoAlpha: 0, duration: 0.05 });
+        }
+    });
+};
+
+onMounted(() => {
+    animateVariantsFn();
+});
+
+watch(() => activeIndex, debounce(animateVariantsFn, DEBOUNCE_MS));
 
 </script>
 
 <template>
     <div class="element" :class="elementType">
         <ul class="variants">
-            <li v-for="n in totalVariants" :class="(n === safeActiveIndex ? 'active' : 'hidden')">
+            <li
+                v-for="n in totalVariants"
+                ref="variants"
+                class="variant"
+            >
                 <img v-if="n <= numVariants"
                     :src="`./avatar_shapes/${elementType}/${fileName}_${n}.png`"
                 />
@@ -40,6 +85,13 @@ const safeActiveIndex = computed(() => {
 </template>
 
 <style lang="css">
+.element,
+.variant {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 .variants {
     margin: 0;
     padding: 0;
@@ -49,21 +101,6 @@ const safeActiveIndex = computed(() => {
 .variants li {
     margin: 0;
     padding: 0;
-}
-
-.hidden {
-    display: none;
-}
-
-.faces,
-.hair,
-.beards,
-.noses,
-.eyes,
-.mouths {
-    position: absolute;
-    top: 0;
-    left: 0;
 }
 
 .noses {

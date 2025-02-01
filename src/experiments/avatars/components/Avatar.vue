@@ -43,17 +43,41 @@ const mouthIndex = computed(() => {
 
 <template>
     <div class="avatar">
-        <AvatarElement element-type="faces" file-name="face" :active-index="faceIndex" :num-variants="numVariants" />
+        <AvatarElement
+            element-type="faces"
+            file-name="face"
+            :active-index="faceIndex"
+            :num-variants="numVariants"
+        />
         <AvatarElement
             element-type="beards"
             file-name="beard"
             :active-index="beardIndex"
             :num-variants="numBeardVariants"
             :empty-slots="numVariants - numBeardVariants"
+            :delay="0.1"
         />
-        <AvatarElement element-type="noses" file-name="nose" :active-index="noseIndex" :num-variants="numVariants" />
-        <AvatarElement element-type="eyes" file-name="eye" :active-index="eyesIndex" :num-variants="numVariants" />
-        <AvatarElement element-type="mouths" file-name="mouth" :active-index="mouthIndex" :num-variants="numVariants" />
+        <AvatarElement
+            element-type="noses"
+            file-name="nose"
+            :active-index="noseIndex"
+            :num-variants="numVariants"
+            :delay="0.15"
+        />
+        <AvatarElement
+            element-type="eyes"
+            file-name="eye"
+            :active-index="eyesIndex"
+            :num-variants="numVariants"
+            :delay="0.07"
+        />
+        <AvatarElement
+            element-type="mouths"
+            file-name="mouth"
+            :active-index="mouthIndex"
+            :num-variants="numVariants"
+            :delay="0.12"
+        />
         <AvatarElement element-type="hair" file-name="hair" :active-index="hairIndex" :num-variants="numVariants" />
     </div>
 </template>
@@ -63,5 +87,6 @@ const mouthIndex = computed(() => {
         position: relative;
         width: 400px;
         height: 500px;
+        padding-bottom: 2rem;
     }
 </style>
