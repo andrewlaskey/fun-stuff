@@ -1,14 +1,26 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-const count = ref(0)
+import Avatar from './components/Avatar.vue';
+
+const inputName = ref('');
 </script>
 
 <template>
-  <button @click="count++">Count is: {{ count }}</button>
+    <div class="avatar-editor">
+        <Avatar :input-name="inputName"/>
+        <input class="text-input" v-model="inputName" type="text" />
+    </div>
 </template>
 
 <style scoped>
-button {
-  font-weight: bold;
+.avatar-editor {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.text-input {
+    padding: 0.5em 1em;
+    font-size: 2em;
 }
 </style>
