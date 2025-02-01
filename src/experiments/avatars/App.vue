@@ -8,7 +8,7 @@ const inputName = ref('');
 <template>
     <div class="avatar-editor">
         <Avatar :input-name="inputName"/>
-        <input class="text-input" v-model="inputName" type="text" />
+        <input class="text-input" v-model="inputName" type="text" placeholder="Your name"/>
     </div>
 </template>
 
@@ -22,5 +22,7 @@ const inputName = ref('');
 .text-input {
     padding: 0.5em 1em;
     font-size: 2em;
+    border: 5px solid #74898c;
+    border-radius: 5px;
 }
 </style>
