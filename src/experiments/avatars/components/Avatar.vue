@@ -58,13 +58,6 @@ const mouthIndex = computed(() => {
             :delay="0.1"
         />
         <AvatarElement
-            element-type="noses"
-            file-name="nose"
-            :active-index="noseIndex"
-            :num-variants="numVariants"
-            :delay="0.15"
-        />
-        <AvatarElement
             element-type="eyes"
             file-name="eye"
             :active-index="eyesIndex"
@@ -77,6 +70,13 @@ const mouthIndex = computed(() => {
             :active-index="mouthIndex"
             :num-variants="numVariants"
             :delay="0.12"
+        />
+        <AvatarElement
+            element-type="noses"
+            file-name="nose"
+            :active-index="noseIndex"
+            :num-variants="numVariants"
+            :delay="0.15"
         />
         <AvatarElement element-type="hair" file-name="hair" :active-index="hairIndex" :num-variants="numVariants" />
     </div>
