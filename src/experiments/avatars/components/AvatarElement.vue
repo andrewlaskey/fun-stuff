@@ -4,12 +4,13 @@ import { gsap } from "gsap";
 import { debounce } from 'lodash';
 
 export interface AvatarElementProps {
-    fileName: string,
-    elementType?: string,
-    activeIndex?: number,
-    numVariants?: number,
-    emptySlots?: number,
-    delay?: number
+    fileName: string;
+    elementType?: string;
+    activeIndex?: number;
+    numVariants?: number;
+    emptySlots?: number;
+    delay?: number;
+    renderSingleVariant?: boolean;
 }
 
 const DEBOUNCE_MS = 300;
@@ -20,44 +21,47 @@ const {
     activeIndex = 0,
     numVariants = 14,
     emptySlots = 0,
-    delay = 0
+    delay = 0,
+    renderSingleVariant = false
 } = defineProps<AvatarElementProps>();
 const variants = useTemplateRef('variants');
 
 const totalVariants = computed(() => {
     return numVariants + emptySlots;
-})
+});
 
 const safeActiveIndex = computed(() => {
     return (activeIndex % totalVariants.value);
-})
+});
 
 const animateVariantsFn = () => {
-    variants.value.forEach((variantEl, i) => {
-        if (gsap.isTweening(variantEl)) {
-            gsap.killTweensOf(variantEl);
-        }
+    if (variants.value) {
+        variants.value.forEach((variantEl, i) => {
+            if (gsap.isTweening(variantEl)) {
+                gsap.killTweensOf(variantEl);
+            }
 
-        if (i === safeActiveIndex.value) {
-            gsap.set(variantEl, { scale: 0.7, autoAlpha: 1 })
-            gsap.to(variantEl, {
-                delay,
-                duration: 0.25,
-                ease: "elastic.inOut(1.5,0.3)",
-                scale: 1,
-            });
-        } else {
-            const tl = gsap.timeline();
-            tl.to(variantEl,
-                {
-                    duration: 0.15,
-                    scale: 0.8,
-                    ease: "power4.out"
-                }
-            )
-            .to(variantEl, { autoAlpha: 0, duration: 0.05 });
-        }
-    });
+            if (i === safeActiveIndex.value) {
+                gsap.set(variantEl, { scale: 0.7, autoAlpha: 1 })
+                gsap.to(variantEl, {
+                    delay,
+                    duration: 0.25,
+                    ease: "elastic.inOut(1.5,0.3)",
+                    scale: 1,
+                });
+            } else {
+                const tl = gsap.timeline();
+                tl.to(variantEl,
+                    {
+                        duration: 0.15,
+                        scale: 0.8,
+                        ease: "power4.out"
+                    }
+                )
+                .to(variantEl, { autoAlpha: 0, duration: 0.05 });
+            }
+        });
+    }
 };
 
 onMounted(() => {
@@ -70,7 +74,13 @@ watch(() => activeIndex, debounce(animateVariantsFn, DEBOUNCE_MS));
 
 <template>
     <div class="element" :class="elementType">
-        <ul class="variants">
+        <div class="variant" v-if="renderSingleVariant">
+            <img
+                v-if="safeActiveIndex + 1 < numVariants"
+                :src="`./avatar_shapes/${elementType}/${fileName}_${safeActiveIndex + 1}.png`"
+            />
+        </div>
+        <ul class="variants" v-else>
             <li
                 v-for="n in totalVariants"
                 ref="variants"
@@ -101,9 +111,5 @@ watch(() => activeIndex, debounce(animateVariantsFn, DEBOUNCE_MS));
 .variants li {
     margin: 0;
     padding: 0;
-}
-
-.noses {
-    transform: translateX(-10%);
 }
 </style>

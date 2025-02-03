@@ -2,23 +2,40 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>Avatars</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Jua&family=VT323&display=swap');
     html, body {margin: 0; height: 100%; overflow: hidden}
     body {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      position: relative;
       margin: 0;
       background-color: #f0f0f0;
-      font-family: Arial, sans-serif;
+      font-family: "Jua", Arial, sans-serif;
     }
+    .title {
+        font-size: 3.5em;
+    }
+
   </style>
 </head>
 <body>
+    <h1 class="title">Avatar Generator</h1>
     <div id="app"></div>
     <script type="module" src="./scripts.ts"></script>
+    <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+<script>
+  kofiWidgetOverlay.draw('timbertales', {
+    'type': 'floating-chat',
+    'floating-chat.donateButton.text': 'Support me',
+    'floating-chat.donateButton.background-color': '#00b9fe',
+    'floating-chat.donateButton.text-color': '#fff'
+  });
+</script>
 </body>
 </html>

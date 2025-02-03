@@ -4,9 +4,10 @@ import AvatarElement from './AvatarElement.vue';
 
 export interface AvatarProps {
     inputName?: string;
+    renderSingleVariant?: boolean;
 }
 
-const { inputName = '' } = defineProps<AvatarProps>();
+const { inputName = '', renderSingleVariant = false } = defineProps<AvatarProps>();
 
 const numVariants = 14;
 const numBeardVariants = 6;
@@ -48,6 +49,7 @@ const mouthIndex = computed(() => {
             file-name="face"
             :active-index="faceIndex"
             :num-variants="numVariants"
+            :render-single-variant="renderSingleVariant"
         />
         <AvatarElement
             element-type="beards"
@@ -56,6 +58,7 @@ const mouthIndex = computed(() => {
             :num-variants="numBeardVariants"
             :empty-slots="numVariants - numBeardVariants"
             :delay="0.1"
+            :render-single-variant="renderSingleVariant"
         />
         <AvatarElement
             element-type="eyes"
@@ -63,6 +66,7 @@ const mouthIndex = computed(() => {
             :active-index="eyesIndex"
             :num-variants="numVariants"
             :delay="0.07"
+            :render-single-variant="renderSingleVariant"
         />
         <AvatarElement
             element-type="mouths"
@@ -70,6 +74,7 @@ const mouthIndex = computed(() => {
             :active-index="mouthIndex"
             :num-variants="numVariants"
             :delay="0.12"
+            :render-single-variant="renderSingleVariant"
         />
         <AvatarElement
             element-type="noses"
@@ -77,8 +82,15 @@ const mouthIndex = computed(() => {
             :active-index="noseIndex"
             :num-variants="numVariants"
             :delay="0.15"
+            :render-single-variant="renderSingleVariant"
         />
-        <AvatarElement element-type="hair" file-name="hair" :active-index="hairIndex" :num-variants="numVariants" />
+        <AvatarElement
+            element-type="hair"
+            file-name="hair"
+            :active-index="hairIndex"
+            :num-variants="numVariants"
+            :render-single-variant="renderSingleVariant"
+        />
     </div>
 </template>
 
