@@ -19,7 +19,7 @@ const COLORS = [
     '#833167',
     '#8b8277'
 ];
-const CYCLE_SPEED = 1.25 * 1000;
+const CYCLE_SPEED = 1.5 * 1000;
 
 // https://www.geeksforgeeks.org/random-string-generator-using-javascript/
 const randomStringGenerator = (): string => {
@@ -99,6 +99,7 @@ onMounted(() => {
     border: 5px solid #74898c;
     border-radius: 5px;
     outline: none;
+    font-family: "Jua", Arial, sans-serif;
 }
 
 .pause-toggle-btn {

@@ -45,7 +45,7 @@ const animateVariantsFn = () => {
                 gsap.set(variantEl, { scale: 0.7, autoAlpha: 1 })
                 gsap.to(variantEl, {
                     delay,
-                    duration: 0.25,
+                    duration: 0.5,
                     ease: "elastic.inOut(1.5,0.3)",
                     scale: 1,
                 });
@@ -100,6 +100,7 @@ watch(() => activeIndex, debounce(animateVariantsFn, DEBOUNCE_MS));
     position: absolute;
     top: 0;
     left: 0;
+    right: 0;
 }
 
 .variants {
@@ -111,5 +112,9 @@ watch(() => activeIndex, debounce(animateVariantsFn, DEBOUNCE_MS));
 .variants li {
     margin: 0;
     padding: 0;
+}
+
+.variant img {
+    width: 100%;
 }
 </style>

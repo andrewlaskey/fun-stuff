@@ -97,8 +97,8 @@ const mouthIndex = computed(() => {
 <style>
     .avatar {
         position: relative;
-        width: 400px;
-        height: 500px;
+        width: 360px;
+        height: 400px;
         padding-bottom: 2rem;
     }
 </style>
