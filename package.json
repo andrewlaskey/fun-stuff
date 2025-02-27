@@ -14,6 +14,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/lodash": "^4.17.15",
+    "@types/matter-js": "^0.19.8",
     "@types/p5": "^1.7.6",
     "vite": "^5.4.11",
     "vitest": "^2.1.8"
@@ -22,6 +23,7 @@
     "@vitejs/plugin-vue": "^5.2.1",
     "gsap": "^3.12.7",
     "lodash": "^4.17.21",
+    "matter-js": "^0.20.0",
     "p5": "^1.11.2",
     "radash": "^12.1.0",
     "vue": "^3.5.13"

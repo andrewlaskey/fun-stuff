@@ -1,5 +1,7 @@
 
+import { getRandomInt } from '../../utils/getRandomInt';
 import { lerp } from '../../utils/lerp';
+import { Engine, Bodies, Composite, Body, Render } from 'matter-js';
 
 type AppState = "loading" | "running";
 
@@ -21,12 +23,14 @@ class App {
     public canvas: HTMLCanvasElement;
     public video: HTMLVideoElement;
     public ctx: CanvasRenderingContext2D | null;
+    public engine: Engine;
 
     private poses: ml5.PoseResult[] = [];
     private leftHandPose: Keypoint | undefined;
     private rightHandPose: Keypoint | undefined;
-    private leftBridge: Point = { x: 0, y: 0 };
-    private rightBridge: Point = { x: 0, y: 0 };
+    private leftBridge: Body;
+    private rightBridge: Body;
+    private balls: Body[] = []
 
     constructor(document: Document, canvasSelector: string) {
         this.document = document;
@@ -37,6 +41,11 @@ class App {
         console.log(this.ctx);
         this.video = this.document.createElement('video');
         // this.canvas.insertAdjacentElement('beforebegin', this.video);
+
+        this.engine = Engine.create();
+        this.leftBridge = Bodies.circle(0, 0, 10, { isStatic: true });
+        this.rightBridge = Bodies.circle(0, 0, 10, { isStatic: true });
+        this.setupPhysics();
     }
 
     setState = (value: AppState): void => {
@@ -89,6 +98,39 @@ class App {
         this.setState('running');
     }
 
+    setupPhysics(): void {
+        this.engine.gravity.scale = 0;
+
+        for (let index = 0; index < 50; index++) {
+            const x = getRandomInt(0, 640);
+            const y = getRandomInt(0, 480);
+            const radius = getRandomInt(5, 40);
+            this.balls.push(Bodies.circle(x, y, radius));
+        }
+        const topWall = Bodies.rectangle(320, 0, 1000, 60, { isStatic: true });
+        const bottomWall = Bodies.rectangle(320, 480, 1000, 60, { isStatic: true });
+        const leftWall = Bodies.rectangle(0, 240, 60, 1000, { isStatic: true });
+        const rightWall = Bodies.rectangle(640, 240, 60, 1000, { isStatic: true });
+        Composite.add(this.engine.world, [
+            topWall,
+            bottomWall,
+            leftWall,
+            rightWall,
+            this.leftBridge,
+            this.rightBridge,
+            ...this.balls
+        ]);
+        const render = Render.create({
+            element: this.document.body,
+            engine: this.engine,
+            options: {
+                width: 640,
+                height: 480
+            }
+        });
+        Render.run(render);
+    }
+
     draw(): void {
         if (this.state === 'running' && this.ctx) {
           this.ctx.save();
@@ -98,24 +140,37 @@ class App {
           this.ctx.restore();
       
           if (this.leftHandPose && this.leftHandPose.confidence > 0.1) {
-            this.leftBridge.x = lerp(this.leftBridge.x, this.leftHandPose.x, 0.3);
-            this.leftBridge.y = lerp(this.leftBridge.y, this.leftHandPose.y, 0.3);
+            Body.setPosition(this.leftBridge, {
+                x: lerp(this.leftBridge.position.x, this.leftHandPose.x, 0.3),
+                y: lerp(this.leftBridge.position.y, this.leftHandPose.y, 0.3)
+            });
           }
       
           if (this.rightHandPose && this.rightHandPose.confidence > 0.1) {
-            this.rightBridge.x = lerp(this.rightBridge.x, this.rightHandPose.x, 0.3);
-            this.rightBridge.y = lerp(this.rightBridge.y, this.rightHandPose.y, 0.3);
+            Body.setPosition(this.rightBridge, {
+                x: lerp(this.rightBridge.position.x, this.rightHandPose.x, 0.3),
+                y: lerp(this.rightBridge.position.y, this.rightHandPose.y, 0.3)
+            });
           }
       
           this.ctx.fillStyle = 'red';
           this.ctx.beginPath();
-          this.ctx.arc(this.leftBridge.x, this.leftBridge.y, 10, 0, 2 * Math.PI);
+          this.ctx.arc(this.leftBridge.position.x, this.leftBridge.position.y, 10, 0, 2 * Math.PI);
           this.ctx.fill();
       
           this.ctx.fillStyle = 'green';
           this.ctx.beginPath();
-          this.ctx.arc(this.rightBridge.x, this.rightBridge.y, 10, 0, 2 * Math.PI);
+          this.ctx.arc(this.rightBridge.position.x, this.rightBridge.position.y, 10, 0, 2 * Math.PI);
           this.ctx.fill();
+
+          for(const ball of this.balls) {
+            this.ctx.fillStyle = 'purple';
+            this.ctx.beginPath();
+            this.ctx.arc(ball.position.x, ball.position.y, ball.circleRadius ?? 10, 0, 2 * Math.PI);
+            this.ctx.fill();
+          };
+
+          Engine.update(this.engine, 1000 / 60);
         }
       
         requestAnimationFrame(() => {
