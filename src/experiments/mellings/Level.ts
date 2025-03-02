@@ -3,11 +3,14 @@ import { Body, Vector, Bodies, Composite, Engine, Events } from "matter-js";
 import { COLORS } from "./constants";
 import { Melling } from "./Melling";
 import { CATEGORIES } from "./constants";
+import gsap from "gsap";
 
 export interface Platform {
     width: number;
     height: number;
-    body: Body
+    body: Body;
+    x: number;
+    y: number
 }
 
 export class Level {
@@ -35,9 +38,25 @@ export class Level {
                 isStatic: true
             }),
             width: 230,
-            height: 15
+            height: 15,
+            x: start.x,
+            y: start.y
         };
         this.platforms.push(platform);
+
+        const movingPlatform: Platform = {
+            body: Bodies.rectangle(300, 270, 15, 230, {
+                isStatic: true,
+                collisionFilter: {
+                    category: CATEGORIES.WALL
+                }
+            }),
+            width: 15,
+            height: 230,
+            x: 300,
+            y: 270
+        };
+        this.platforms.push(movingPlatform);
     }
 
     setupPhysics(engine: Engine, mellings: Melling[]): void {
@@ -45,6 +64,20 @@ export class Level {
             this.goal,
             ...this.platforms.map(platform => platform.body)
         ]);
+
+        gsap.to(this.platforms[1], {
+            y: 40,
+            repeat: -1,
+            duration: 3,
+            yoyo: true,
+            ease: 'elastic.inOut',
+            onUpdate: () => {
+                Body.setPosition(this.platforms[1].body, {
+                    x: this.platforms[1].x,
+                    y: this.platforms[1].y
+                });
+            }
+        })
 
         Events.on(engine, 'collisionStart', (event) => {
             const pairs = event.pairs;
