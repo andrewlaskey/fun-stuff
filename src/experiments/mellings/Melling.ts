@@ -3,17 +3,20 @@ import { Bodies, Body, Vector, World, Query, Composite, Engine, Events, Collisio
 
 import { CATEGORIES } from "./constants";
 
+export type MellingState = 'alive' | 'dying' | 'dead' | 'goal';
 export class Melling {
     public body: Body;
+    public groundSensor: Body;
     public color: string;
-    public state: 'alive' | 'dying' | 'dead' | 'goal' = 'alive';
+    public state: MellingState = 'alive';
+    public isOnGround = true; // always move horizontally for now regardless if on ground. it looks better
 
     private width = 25;
     private height = this.width * 1.6;
     private direction = 1; // 1 for right, -1 for left
     private speed = 0.5;
 
-    private groundSensor: Body;
+    
 
     private dealthCountdown = 0.5;
 
@@ -26,13 +29,14 @@ export class Melling {
             inertia: Infinity,
             collisionFilter: {
                 category: CATEGORIES.MELLING,
-                mask: CATEGORIES.DEFAULT | CATEGORIES.WALL | CATEGORIES.LAVA // Mellings collide with walls and default objects
+                mask: ~CATEGORIES.MELLING
             }
         });
         this.groundSensor = Bodies.rectangle(x, y + (this.height / 2), this.width * 1.2, this.height * 0.1, {
             isSensor: true,
             collisionFilter: {
-                category: CATEGORIES.MELLING
+                category: CATEGORIES.MELLING,
+                mask: ~CATEGORIES.MELLING
             }
         });
         this.color = color;
@@ -135,12 +139,9 @@ export class Melling {
         });
     }
 
-    private aliveUpdate(engine: Engine): void {
-        // Check if on ground
-        const isOnGround = this.checkGround(engine);
-            
+    private aliveUpdate(engine: Engine): void {            
         // Only move horizontally if on ground
-        if (isOnGround) {
+        if (this.isOnGround) {
             // Check for wall collision
             const hitWall = this.checkWallCollision(engine);
             if (hitWall) {
@@ -160,13 +161,11 @@ export class Melling {
                 y: this.body.velocity.y 
             });
         }
-    }
 
-    // Check if Melling is on ground using raycast
-    private checkGround(engine: Engine): boolean {
-        const bodies = Composite.allBodies(engine.world);
-
-        return bodies.some(body => Collision.collides(this.groundSensor, body));
+        Body.setPosition(this.groundSensor, {
+            x: this.body.position.x,
+            y: this.body.position.y + + (this.height / 2)
+        });
     }
 
     // Check for wall collision using raycast

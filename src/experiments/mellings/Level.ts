@@ -1,17 +1,11 @@
 import { Body, Vector, Bodies, Composite, Engine, Events } from "matter-js";
+import gsap from "gsap";
 
 import { COLORS } from "./constants";
 import { Melling } from "./Melling";
 import { CATEGORIES } from "./constants";
-import gsap from "gsap";
+import { Platform, PlatformMove } from "./Platform";
 
-export interface Platform {
-    width: number;
-    height: number;
-    body: Body;
-    x: number;
-    y: number
-}
 
 export class Level {
     public startLocation: Vector;
@@ -33,80 +27,24 @@ export class Level {
             }
         });
 
-        const platform: Platform = {
-            body: Bodies.rectangle(start.x, start.y + 80, 230, 15, {
-                isStatic: true
-            }),
-            width: 230,
-            height: 15,
-            x: start.x,
-            y: start.y
-        };
-        this.platforms.push(platform);
+        const startingPlatform = new Platform(start.x, start.y + 80, 230, 15);
+        this.platforms.push(startingPlatform);
 
-        const movingPlatform: Platform = {
-            body: Bodies.rectangle(300, 270, 15, 230, {
-                isStatic: true,
-                collisionFilter: {
-                    category: CATEGORIES.WALL
-                }
-            }),
-            width: 15,
-            height: 230,
-            x: 300,
-            y: 270
+        const move: PlatformMove = {
+            deltaX: 0,
+            deltaY: -150,
+            duration: 3
         };
+        const movingPlatform = new Platform(300, 270, 15, 230, move);
         this.platforms.push(movingPlatform);
     }
 
     setupPhysics(engine: Engine, mellings: Melling[]): void {
-        Composite.add(engine.world, [
-            this.goal,
-            ...this.platforms.map(platform => platform.body)
-        ]);
+        Composite.add(engine.world, [this.goal]);
 
-        gsap.to(this.platforms[1], {
-            y: 40,
-            repeat: -1,
-            duration: 3,
-            yoyo: true,
-            ease: 'elastic.inOut',
-            onUpdate: () => {
-                Body.setPosition(this.platforms[1].body, {
-                    x: this.platforms[1].x,
-                    y: this.platforms[1].y
-                });
-            }
-        })
-
-        Events.on(engine, 'collisionStart', (event) => {
-            const pairs = event.pairs;
-            
-            for (let i = 0; i < pairs.length; i++) {
-                const pair = pairs[i];
-                
-                // Check if one body is a Melling and the other is lava
-                const bodyA = pair.bodyA;
-                const bodyB = pair.bodyB;
-                
-                const isMellingA = bodyA.collisionFilter.category === CATEGORIES.MELLING;
-                const isGoalB = bodyB === this.goal;
-                
-                const isMellingB = bodyB.collisionFilter.category === CATEGORIES.MELLING;
-                const isGoalA = bodyA === this.goal;
-                
-                if ((isMellingA && isGoalB) || (isMellingB && isGoalA)) {
-                    const mellingBody = isMellingA ? bodyA : bodyB
-                    
-                    // Handle lava collision
-                    const melling = mellings.find(m => m.body === mellingBody);
-
-                    if (melling) {
-                        melling.goal(engine);
-                    }
-                }
-            }
-        });
+        for (const platform of this.platforms) {
+            platform.setupPhysics(engine);
+        }
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
@@ -131,15 +69,7 @@ export class Level {
         ctx.fill();
 
         for (const platform of this.platforms) {
-            ctx.fillStyle = COLORS['Raisin black'];
-            ctx.beginPath();
-            ctx.rect(
-                platform.body.position.x - (platform.width / 2),
-                platform.body.position.y - (platform.height / 2),
-                platform.width,
-                platform.height
-            );
-            ctx.fill();
+            platform.draw(ctx);
         }
     }
 }

@@ -10,8 +10,7 @@ export const COLORS = {
 export const CATEGORIES = {
     DEFAULT: 0x0001,
     MELLING: 0x0002,
-    WALL: 0x0004,
-    LAVA: 0x0005,
-    GOAL: 0x0006
+    LAVA: 0x0003,
+    GOAL: 0x0004
     // Add other categories as needed
   };
