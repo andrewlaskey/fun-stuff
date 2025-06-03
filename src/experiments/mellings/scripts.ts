@@ -1,10 +1,4 @@
-import { App } from "./control/App";
+import { createApp } from "vue";
+import VueApp from "./ui/VueApp.vue";
 
-const app = new App(document, '#canvas');
-
-app.preload().then(() => {
-    console.log('preload complete');
-    app.manager.start();
-}).catch((e) => {
-    console.error('failed to start app', e);
-});
+createApp(VueApp).mount("#app");

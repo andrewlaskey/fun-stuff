@@ -6,6 +6,7 @@ import { CATEGORIES, COLORS } from "../utils/constants";
 import { PoseManager } from "./PoseManager";
 import { draw, group } from "radash";
 import { LevelConfig } from "../types/LevelConfig";
+import { reactive } from "vue";
 
 export class GameManager {
     public state: 'playing' | 'win' | 'lose' = 'playing';
@@ -19,6 +20,11 @@ export class GameManager {
     public poseManager: PoseManager;
     public leftPaddle: Paddle;
     public rightPaddle: Paddle;
+
+    public uiState = reactive({
+        mellingsCount: 0,
+        level: 0
+    });
 
     private lastFrameTime: number = performance.now();
 
@@ -47,7 +53,8 @@ export class GameManager {
         for (const levelConfig of levelData) {
             this.levels.push(new Level(levelConfig))
         }
-       
+
+        this.uiState.level = this.currentLevel;
     }
 
     start(): void {
@@ -80,6 +87,8 @@ export class GameManager {
         Engine.update(this.engine, 1000 / 60);
 
         this.checkEndCondition();
+
+        this.uiState.mellingsCount = this.mellings.length;
 
         this.draw();
 
