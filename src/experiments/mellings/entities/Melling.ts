@@ -1,7 +1,7 @@
 import gsap from "gsap";
 import { Bodies, Body, Vector, World, Query, Composite, Engine, Events, Collision } from "matter-js";
 
-import { CATEGORIES } from "./constants";
+import { CATEGORIES } from "../utils/constants";
 
 export type MellingState = 'alive' | 'dying' | 'dead' | 'goal';
 export class Melling {

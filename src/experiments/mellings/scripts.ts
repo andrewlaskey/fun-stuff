@@ -1,4 +1,4 @@
-import { App } from "./App";
+import { App } from "./control/App";
 
 const app = new App(document, '#canvas');
 

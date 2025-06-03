@@ -1,3 +1,4 @@
+import { levels } from '../data/Levels';
 import { GameManager } from './GameManager';
 
 type AppState = "loading" | "running";
@@ -26,7 +27,8 @@ export class App {
             gameHeight,
             100,
             this.video,
-            this.ctx
+            this.ctx,
+            levels
         );
     }
 

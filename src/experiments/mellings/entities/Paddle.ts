@@ -1,7 +1,7 @@
 import { Bodies, Body, Composite, Engine } from "matter-js";
 
-import { CATEGORIES } from "./constants";
-import { lerp } from '../../utils/lerp';
+import { CATEGORIES } from "../utils/constants";
+import { lerp } from '../../../utils/lerp';
 
 interface Point {
     x: number;

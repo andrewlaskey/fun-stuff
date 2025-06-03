@@ -1,10 +1,11 @@
 import { Bodies, Body, Common, Composite, Engine, Events, Vector } from "matter-js";
-import { Level } from "./Level";
-import { Melling, MellingState } from "./Melling";
-import { Paddle } from "./Paddle";
-import { CATEGORIES, COLORS } from "./constants";
+import { Level } from "../entities/Level";
+import { Melling, MellingState } from "../entities/Melling";
+import { Paddle } from "../entities/Paddle";
+import { CATEGORIES, COLORS } from "../utils/constants";
 import { PoseManager } from "./PoseManager";
 import { draw, group } from "radash";
+import { LevelConfig } from "../types/LevelConfig";
 
 export class GameManager {
     public state: 'playing' | 'win' | 'lose' = 'playing';
@@ -30,7 +31,8 @@ export class GameManager {
         public height: number,
         public totalMellings: number,
         private video: HTMLVideoElement,
-        private ctx: CanvasRenderingContext2D | null
+        private ctx: CanvasRenderingContext2D | null,
+        levelData: LevelConfig[]
     ) {
         this.engine = Engine.create();
 
@@ -42,7 +44,10 @@ export class GameManager {
         this.leftPaddle = new Paddle(platformWidth, platformHeight, COLORS['Hunyadi yellow']);
         this.rightPaddle = new Paddle(platformWidth, platformHeight, COLORS['Flame']);
 
-        this.levels.push(new Level(Vector.create(40, 100), Vector.create(500, 360)));
+        for (const levelConfig of levelData) {
+            this.levels.push(new Level(levelConfig))
+        }
+       
     }
 
     start(): void {
