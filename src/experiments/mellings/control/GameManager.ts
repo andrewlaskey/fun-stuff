@@ -22,7 +22,8 @@ export class GameManager {
     public rightPaddle: Paddle;
 
     public uiState = reactive({
-        mellingsCount: 0,
+        aliveCount: 0,
+        savedCount: 0,
         level: 0
     });
 
@@ -88,7 +89,8 @@ export class GameManager {
 
         this.checkEndCondition();
 
-        this.uiState.mellingsCount = this.mellings.length;
+        this.uiState.aliveCount = this.getAliveMellingsCount();
+        this.uiState.savedCount = this.getSavedMellingsCount();
 
         this.draw();
 

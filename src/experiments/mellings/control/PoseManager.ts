@@ -21,7 +21,6 @@ export class PoseManager {
 
     start(video: HTMLVideoElement): void {
         this.bodyPose.detectStart(video, (results: ml5.PoseResult[]) => {
-            // Store the result in a global
             this.poses = results;
 
             if (this.poses.length > 0) {

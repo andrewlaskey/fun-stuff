@@ -57,8 +57,6 @@ export class App {
         this.video.srcObject = stream;
         this.video.play();
 
-        console.log(this.video);
-
         this.canvas.width = this.video.width = this.manager.width;
         this.canvas.height = this.video.height = this.manager.height;
 
