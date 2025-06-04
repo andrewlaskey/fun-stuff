@@ -92,14 +92,14 @@ export class GameManager {
         this.uiState.aliveCount = this.getAliveMellingsCount();
         this.uiState.savedCount = this.getSavedMellingsCount();
 
-        this.draw();
+        this.draw(deltaTime);
 
         requestAnimationFrame(() => {
             this.loop()
         });
     }
 
-    draw(): void {
+    draw(detlaTime: number): void {
         if (this.ctx) {
             this.drawVideo();
             this.levels[this.currentLevel].draw(this.ctx);
@@ -107,7 +107,7 @@ export class GameManager {
             this.rightPaddle.draw(this.ctx);
 
             for (const melling of this.mellings) {
-                melling.draw(this.ctx);
+                melling.draw(this.ctx, detlaTime);
             }
         }
     }
