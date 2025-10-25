@@ -118,7 +118,6 @@ export class Melling {
         this.pose2(ctx);
       }
 
-      // Draw eyes
       this.eyes(ctx);
 
       ctx.restore();

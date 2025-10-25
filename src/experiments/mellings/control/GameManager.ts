@@ -29,7 +29,7 @@ export class GameManager {
 
     private lastFrameTime: number = performance.now();
 
-    private addMellingIntervalMs: number = 200;
+    private addMellingIntervalMs: number = 500;
 
     private gravityScale: number = 0.0005;
 

@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mellings</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Avatars</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Jua&family=VT323&display=swap');
     html, body {margin: 0; height: 100%; overflow: hidden}
     body {
       display: flex;
@@ -12,19 +13,20 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      position: relative;
       margin: 0;
       background-color: #f0f0f0;
-      font-family: Arial, sans-serif;
+      font-family: "Jua", Arial, sans-serif;
     }
-    #canvas {
-      border: 5px solid rgb(51, 44, 52);
+    .title {
+        font-size: 3.5em;
     }
 
   </style>
 </head>
 <body>
+    <h1 class="title">Pixi Test</h1>
     <div id="app"></div>
-    <script src="https://unpkg.com/ml5@1/dist/ml5.js"></script>
     <script type="module" src="./scripts.ts"></script>
 </body>
 </html>

@@ -6,6 +6,7 @@ declare namespace ml5 {
         input: HTMLVideoElement,
         callback: (results: Array<PoseResult>) => void
       ) => void;
+      detectStop: () => void;
     }
   
     interface Keypoint {
@@ -41,11 +42,14 @@ declare namespace ml5 {
       modelComplexity?: number;
       minDetectionConfidence?: number;
       minTrackingConfidence?: number;
+      runtime?: 'tfjs' | 'mediapipe';
+      enableSmoothing?: boolean;
     }
   
     function bodyPose(
       modelNameOrPath: string,
-      options?: BodyPoseOptions
+      options?: BodyPoseOptions,
+      callback?: () => void
     ): BodyPose;
   }
   
