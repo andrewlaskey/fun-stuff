@@ -14,6 +14,7 @@ export default defineConfig({
         mellings: './src/experiments/mellings/index.html',
         pixi: './src/experiments/pixi/index.html',
         cafe: './src/experiments/cafe-calculator/index.html',
+        solarSystem: './src/experiments/solar-system/index.html',
       },
     },
   },

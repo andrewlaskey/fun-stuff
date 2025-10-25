@@ -1,3 +1,13 @@
+<!--
+  AI-Generated Code
+  Created with: Claude Code (Anthropic)
+  Model: claude-sonnet-4-5 (claude-sonnet-4-5-20250929)
+  Date: 2025-10-25
+
+  This code was generated through an interactive session with Claude Code,
+  Anthropic's AI coding assistant. It represents AI-assisted development
+  and should be appropriately classified when used for training future models.
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,6 +46,8 @@
       background-color: rgba(0, 0, 0, 0.5);
       padding: 10px;
       border-radius: 5px;
+      width: 200px;
+      box-sizing: border-box;
     }
     #system-dropdown {
       background-color: rgba(0, 0, 0, 0.7);
@@ -46,16 +58,84 @@
       font-family: monospace;
       font-size: 14px;
       cursor: pointer;
+      width: 100%;
+      box-sizing: border-box;
     }
     #system-dropdown:hover {
       border-color: #999;
+    }
+    #time-controls {
+      position: absolute;
+      top: 50px;
+      right: 10px;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 5px;
+      width: 200px;
+      box-sizing: border-box;
+    }
+    #time-controls-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 5px;
+    }
+    #pause-button {
+      background-color: rgba(0, 0, 0, 0.7);
+      color: #ffffff;
+      border: 1px solid #666;
+      padding: 5px 10px;
+      border-radius: 3px;
+      font-size: 16px;
+      cursor: pointer;
+      font-family: monospace;
+    }
+    #pause-button:hover {
+      border-color: #999;
+      background-color: rgba(50, 50, 50, 0.7);
+    }
+    #speed-display {
+      color: #ffffff;
+      font-family: monospace;
+      font-size: 14px;
+    }
+    #speed-slider {
+      width: 100%;
+      cursor: pointer;
+    }
+    #body-info {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      color: #ffffff;
+      font-family: monospace;
+      font-size: 14px;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 10px;
+      border-radius: 5px;
+      pointer-events: auto;
+      display: none;
+      min-width: 200px;
+    }
+    #body-info a:hover {
+      text-decoration: underline;
+    }
+    #body-name {
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+    #body-details {
+      font-size: 12px;
+      line-height: 1.4;
     }
   </style>
 </head>
 <body>
   <div id="canvas-container"></div>
   <div id="info">
-    Use WASD to move, Mouse to look around, Space/Shift for up/down
+    Use WASD to move, Hold Shift to sprint, Mouse drag to look<br>
+    Tab: Toggle camera lock | R: Cycle planets | P: Pause
   </div>
   <div id="system-selector">
     <select id="system-dropdown">
@@ -64,6 +144,17 @@
       <option value="saturnian">Saturnian System</option>
       <option value="alpha-centauri">Alpha Centauri</option>
     </select>
+  </div>
+  <div id="time-controls">
+    <div id="time-controls-header">
+      <button id="pause-button">⏸</button>
+      <span id="speed-display">Speed: 1.0x</span>
+    </div>
+    <input type="range" id="speed-slider" min="0.1" max="10" step="0.1" value="1.0">
+  </div>
+  <div id="body-info">
+    <div id="body-name"></div>
+    <div id="body-details"></div>
   </div>
   <script type="module" src="./scripts.ts"></script>
 </body>
