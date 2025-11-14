@@ -13,7 +13,6 @@ export default defineConfig({
         tunnel: './src/experiments/flashing-tunnel/index.html',
         mellings: './src/experiments/mellings/index.html',
         pixi: './src/experiments/pixi/index.html',
-        cafe: './src/experiments/cafe-calculator/index.html',
         solarSystem: './src/experiments/solar-system/index.html',
       },
     },
