@@ -34,7 +34,7 @@ export const jovianSystem: SystemConfig = {
       radius: 3.5,
       distance: 75,
       orbitSpeed: 0.006,
-      color: 0xdcdcdc,
+      color: 0xd0e8ff, // Icy blue-white
     },
     {
       name: "Ganymede",

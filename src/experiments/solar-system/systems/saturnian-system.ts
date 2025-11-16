@@ -27,35 +27,35 @@ export const saturnianSystem: SystemConfig = {
       radius: 2,
       distance: 45,
       orbitSpeed: 0.012,
-      color: 0xe0e0e0,
+      color: 0xcce0ff, // Icy blue-white
     },
     {
       name: "Enceladus",
       radius: 2.5,
       distance: 54,
       orbitSpeed: 0.01,
-      color: 0xffffff,
+      color: 0xe8f4ff, // Bright icy blue-white
     },
     {
       name: "Tethys",
       radius: 3,
       distance: 63,
       orbitSpeed: 0.009,
-      color: 0xdcdcdc,
+      color: 0xd0e8ff, // Icy blue-white
     },
     {
       name: "Dione",
       radius: 3.5,
       distance: 75,
       orbitSpeed: 0.007,
-      color: 0xc0c0c0,
+      color: 0xc8e0f8, // Icy blue-white
     },
     {
       name: "Rhea",
       radius: 4.5,
       distance: 97,
       orbitSpeed: 0.005,
-      color: 0xb0b0b0,
+      color: 0xc0d8f0, // Icy blue-white
     },
     {
       name: "Titan",

@@ -13,6 +13,7 @@ import { solarSystem } from "./systems/solar-system";
 import { jovianSystem } from "./systems/jovian-system";
 import { saturnianSystem } from "./systems/saturnian-system";
 import { alphaCentauriSystem } from "./systems/alpha-centauri";
+import { trappistSystem } from "./systems/trappist-system";
 import { Simulation } from "./core/Simulation";
 
 // System configurations
@@ -21,6 +22,7 @@ const systems = {
   jovian: jovianSystem,
   saturnian: saturnianSystem,
   "alpha-centauri": alphaCentauriSystem,
+  trappist: trappistSystem,
 };
 
 // Create and start simulation
