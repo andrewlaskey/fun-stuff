@@ -14,6 +14,7 @@ import type { SystemConfig, CelestialBody } from "../systems/solar-system";
 
 interface OrbitingBody {
   mesh: THREE.Mesh;
+  baseDistance: number;
   distance: number;
   orbitSpeed: number;
   rotationSpeed: number;
@@ -23,6 +24,7 @@ interface OrbitingBody {
 export interface HoverableBody {
   mesh: THREE.Mesh;
   body: CelestialBody;
+  ringMesh?: THREE.Mesh;
 }
 
 export class CelestialSystem {
@@ -33,6 +35,9 @@ export class CelestialSystem {
   private allMeshes: THREE.Mesh[] = [];
   private orbitMeshes: THREE.Mesh[] = [];
   private hoverableBodies: HoverableBody[] = [];
+
+  private sizeScale: number = 2.0;
+  private distanceScale: number = 1.8;
 
   constructor(scene: THREE.Scene) {
     this.scene = scene;
@@ -48,7 +53,10 @@ export class CelestialSystem {
   }
 
   private createBody(body: CelestialBody): void {
-    const geometry = new THREE.SphereGeometry(body.radius, 32, 32);
+    const scaledRadius = body.radius * this.sizeScale;
+    const scaledDistance = body.distance * this.distanceScale;
+
+    const geometry = new THREE.SphereGeometry(scaledRadius, 32, 32);
     const material = new THREE.MeshStandardMaterial({
       color: body.color,
       emissive: body.emissive || body.color,
@@ -59,27 +67,32 @@ export class CelestialSystem {
 
     const mesh = new THREE.Mesh(geometry, material);
 
-    if (body.distance === 0) {
+    if (scaledDistance === 0) {
       mesh.position.set(0, 0, 0);
     } else {
-      mesh.position.set(body.distance, 0, 0);
+      mesh.position.set(scaledDistance, 0, 0);
     }
 
     this.scene.add(mesh);
     this.allMeshes.push(mesh);
-    this.hoverableBodies.push({ mesh, body });
+
+    const hoverableBody: HoverableBody = { mesh, body };
 
     // Add rings for Saturn
     if (body.name === "Saturn") {
-      this.createRings(body);
+      const ringMesh = this.createRings(body);
+      hoverableBody.ringMesh = ringMesh;
     }
+
+    this.hoverableBodies.push(hoverableBody);
 
     // Add orbit path for orbiting bodies
     if (body.distance > 0) {
-      this.createOrbitPath(body.distance);
+      this.createOrbitPath(scaledDistance);
       this.orbitingBodies.push({
         mesh,
-        distance: body.distance,
+        baseDistance: body.distance,
+        distance: scaledDistance,
         orbitSpeed: body.orbitSpeed,
         rotationSpeed: body.rotationSpeed ?? 0.002, // Default rotation speed
         angle: Math.random() * Math.PI * 2,
@@ -88,6 +101,7 @@ export class CelestialSystem {
       // Center body (like Sun) still rotates but doesn't orbit
       this.orbitingBodies.push({
         mesh,
+        baseDistance: 0,
         distance: 0,
         orbitSpeed: 0,
         rotationSpeed: body.rotationSpeed,
@@ -96,10 +110,13 @@ export class CelestialSystem {
     }
   }
 
-  private createRings(body: CelestialBody): void {
+  private createRings(body: CelestialBody): THREE.Mesh {
+    const scaledRadius = body.radius * this.sizeScale;
+    const scaledDistance = body.distance * this.distanceScale;
+
     const ringGeometry = new THREE.RingGeometry(
-      body.radius * 1.2,
-      body.radius * 1.7,
+      scaledRadius * 1.2,
+      scaledRadius * 1.7,
       64
     );
     const ringMaterial = new THREE.MeshStandardMaterial({
@@ -113,14 +130,16 @@ export class CelestialSystem {
     const ringMesh = new THREE.Mesh(ringGeometry, ringMaterial);
     ringMesh.rotation.x = Math.PI / 2;
 
-    if (body.distance === 0) {
+    if (scaledDistance === 0) {
       ringMesh.position.set(0, 0, 0);
     } else {
-      ringMesh.position.set(body.distance, 0, 0);
+      ringMesh.position.set(scaledDistance, 0, 0);
     }
 
     this.scene.add(ringMesh);
     this.allMeshes.push(ringMesh);
+
+    return ringMesh;
   }
 
   private createOrbitPath(distance: number): void {
@@ -170,6 +189,13 @@ export class CelestialSystem {
       body.mesh.position.z = Math.sin(body.angle) * body.distance;
       body.mesh.rotation.y += body.rotationSpeed * timeScale;
     });
+
+    // Update ring positions to follow their parent bodies
+    this.hoverableBodies.forEach((hoverableBody) => {
+      if (hoverableBody.ringMesh) {
+        hoverableBody.ringMesh.position.copy(hoverableBody.mesh.position);
+      }
+    });
   }
 
   public getBodies(): CelestialBody[] {
@@ -196,5 +222,81 @@ export class CelestialSystem {
 
   public getConfig(): SystemConfig | null {
     return this.currentConfig;
+  }
+
+  public setSizeScale(scale: number): void {
+    this.sizeScale = scale;
+
+    // Update all body meshes with new scale
+    this.hoverableBodies.forEach((hoverableBody) => {
+      const { mesh, body, ringMesh } = hoverableBody;
+      const newRadius = body.radius * scale;
+
+      // Replace geometry with new scaled size
+      mesh.geometry.dispose();
+      mesh.geometry = new THREE.SphereGeometry(newRadius, 32, 32);
+
+      // Update ring if present
+      if (ringMesh) {
+        ringMesh.geometry.dispose();
+        ringMesh.geometry = new THREE.RingGeometry(
+          newRadius * 1.2,
+          newRadius * 1.7,
+          64
+        );
+      }
+    });
+  }
+
+  public setDistanceScale(scale: number): void {
+    this.distanceScale = scale;
+
+    // Update orbital distances
+    this.orbitingBodies.forEach((orbitBody) => {
+      orbitBody.distance = orbitBody.baseDistance * scale;
+      // Update current position based on new distance
+      orbitBody.mesh.position.x = Math.cos(orbitBody.angle) * orbitBody.distance;
+      orbitBody.mesh.position.z = Math.sin(orbitBody.angle) * orbitBody.distance;
+    });
+
+    // Update ring positions to match their parent bodies
+    this.hoverableBodies.forEach((hoverableBody) => {
+      if (hoverableBody.ringMesh) {
+        const scaledDistance = hoverableBody.body.distance * scale;
+        // Find the corresponding orbiting body to get current angle
+        const orbitBody = this.orbitingBodies.find(
+          (ob) => ob.mesh === hoverableBody.mesh
+        );
+        if (orbitBody) {
+          hoverableBody.ringMesh.position.x =
+            Math.cos(orbitBody.angle) * scaledDistance;
+          hoverableBody.ringMesh.position.z =
+            Math.sin(orbitBody.angle) * scaledDistance;
+        }
+      }
+    });
+
+    // Recreate orbit paths with new distances
+    this.orbitMeshes.forEach((orbit) => {
+      this.scene.remove(orbit);
+      orbit.geometry.dispose();
+      (orbit.material as THREE.Material).dispose();
+    });
+    this.orbitMeshes = [];
+
+    // Create new orbit paths
+    this.orbitingBodies.forEach((orbitBody) => {
+      if (orbitBody.baseDistance > 0) {
+        this.createOrbitPath(orbitBody.distance);
+      }
+    });
+  }
+
+  public getSizeScale(): number {
+    return this.sizeScale;
+  }
+
+  public getDistanceScale(): number {
+    return this.distanceScale;
   }
 }

@@ -144,4 +144,8 @@ export class Renderer {
   public get domElement(): HTMLCanvasElement {
     return this.webGLRenderer.domElement;
   }
+
+  public setStarFieldScale(scale: number): void {
+    this.starField.scale.set(scale, scale, scale);
+  }
 }

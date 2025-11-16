@@ -101,6 +101,20 @@ export class Simulation {
         this.updateURLParam(systemKey);
       }
     });
+
+    // Scale controls
+    this.uiManager.onSizeScaleChange((scale) => {
+      this.celestialSystem.setSizeScale(scale);
+      // Update walking mode if active
+      if (this.playerController.getIsWalkingMode()) {
+        this.updateWalkingModeBody();
+      }
+    });
+
+    this.uiManager.onDistanceScaleChange((scale) => {
+      this.celestialSystem.setDistanceScale(scale);
+      this.renderer.setStarFieldScale(scale);
+    });
   }
 
   public loadSystem(systemKey: string): void {
@@ -114,6 +128,9 @@ export class Simulation {
 
     // Update renderer lighting
     this.renderer.setPointLightIntensity(config.centerLightIntensity);
+
+    // Apply current distance scale to star field
+    this.renderer.setStarFieldScale(this.uiManager.getDistanceScale());
 
     // Update body picker
     this.bodyPicker.setHoverableBodies(this.celestialSystem.getHoverableBodies());

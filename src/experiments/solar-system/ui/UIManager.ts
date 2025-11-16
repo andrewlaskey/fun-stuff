@@ -14,6 +14,8 @@ import type { CelestialBody } from "../systems/solar-system";
 type TimeScaleCallback = (scale: number) => void;
 type PauseCallback = (isPaused: boolean) => void;
 type SystemChangeCallback = (systemKey: string) => void;
+type SizeScaleCallback = (scale: number) => void;
+type DistanceScaleCallback = (scale: number) => void;
 
 export class UIManager {
   private infoDiv: HTMLElement | null;
@@ -24,13 +26,23 @@ export class UIManager {
   private speedSlider: HTMLInputElement | null;
   private speedDisplay: HTMLSpanElement | null;
   private systemDropdown: HTMLSelectElement | null;
+  private sizeScaleSlider: HTMLInputElement | null;
+  private sizeScaleDisplay: HTMLSpanElement | null;
+  private distanceScaleSlider: HTMLInputElement | null;
+  private distanceScaleDisplay: HTMLSpanElement | null;
 
   private isPaused: boolean = false;
   private timeScale: number = 1.0;
+  private sizeScale: number = 2.0; // Actual output scale
+  private distanceScale: number = 1.8; // Actual output scale
+  private sizeDisplayValue: number = 1.0; // Display value (slider position)
+  private distanceDisplayValue: number = 1.0; // Display value (slider position)
 
   private timeScaleCallbacks: TimeScaleCallback[] = [];
   private pauseCallbacks: PauseCallback[] = [];
   private systemChangeCallbacks: SystemChangeCallback[] = [];
+  private sizeScaleCallbacks: SizeScaleCallback[] = [];
+  private distanceScaleCallbacks: DistanceScaleCallback[] = [];
 
   constructor() {
     this.infoDiv = document.getElementById("info");
@@ -41,9 +53,14 @@ export class UIManager {
     this.speedSlider = document.getElementById("speed-slider") as HTMLInputElement;
     this.speedDisplay = document.getElementById("speed-display") as HTMLSpanElement;
     this.systemDropdown = document.getElementById("system-dropdown") as HTMLSelectElement;
+    this.sizeScaleSlider = document.getElementById("size-scale-slider") as HTMLInputElement;
+    this.sizeScaleDisplay = document.getElementById("size-scale-display") as HTMLSpanElement;
+    this.distanceScaleSlider = document.getElementById("distance-scale-slider") as HTMLInputElement;
+    this.distanceScaleDisplay = document.getElementById("distance-scale-display") as HTMLSpanElement;
 
     this.setupTimeControls();
     this.setupSystemDropdown();
+    this.setupScaleControls();
   }
 
   private setupTimeControls(): void {
@@ -80,6 +97,68 @@ export class UIManager {
         const target = e.target as HTMLSelectElement;
         this.systemChangeCallbacks.forEach((cb) => cb(target.value));
       });
+    }
+  }
+
+  private setupScaleControls(): void {
+    if (this.sizeScaleSlider) {
+      this.sizeScaleSlider.addEventListener("input", (e) => {
+        const target = e.target as HTMLInputElement;
+        this.sizeDisplayValue = parseFloat(target.value);
+        this.sizeScale = this.sizeDisplayToOutput(this.sizeDisplayValue);
+        this.updateSizeScaleDisplay();
+        this.sizeScaleCallbacks.forEach((cb) => cb(this.sizeScale));
+      });
+    }
+
+    if (this.distanceScaleSlider) {
+      this.distanceScaleSlider.addEventListener("input", (e) => {
+        const target = e.target as HTMLInputElement;
+        this.distanceDisplayValue = parseFloat(target.value);
+        this.distanceScale = this.distanceDisplayToOutput(this.distanceDisplayValue);
+        this.updateDistanceScaleDisplay();
+        this.distanceScaleCallbacks.forEach((cb) => cb(this.distanceScale));
+      });
+    }
+  }
+
+  // Convert size display value (0.5-2.0) to output value (0.0-3.0)
+  // Display 0.5 → Output 0.0
+  // Display 1.0 → Output 2.0
+  // Display 2.0 → Output 3.0
+  private sizeDisplayToOutput(display: number): number {
+    if (display <= 1.0) {
+      // Map 0.5-1.0 to 0.0-2.0
+      return ((display - 0.5) / 0.5) * 2.0;
+    } else {
+      // Map 1.0-2.0 to 2.0-3.0
+      return 2.0 + ((display - 1.0) / 1.0) * 1.0;
+    }
+  }
+
+  // Convert distance display value (0.5-2.0) to output value (0.5-2.0)
+  // Display 0.5 → Output 0.5
+  // Display 1.0 → Output 1.8
+  // Display 2.0 → Output 2.0
+  private distanceDisplayToOutput(display: number): number {
+    if (display <= 1.0) {
+      // Map 0.5-1.0 to 0.5-1.8
+      return 0.5 + ((display - 0.5) / 0.5) * 1.3;
+    } else {
+      // Map 1.0-2.0 to 1.8-2.0
+      return 1.8 + ((display - 1.0) / 1.0) * 0.2;
+    }
+  }
+
+  private updateSizeScaleDisplay(): void {
+    if (this.sizeScaleDisplay) {
+      this.sizeScaleDisplay.textContent = `Size: ${this.sizeDisplayValue.toFixed(1)}x`;
+    }
+  }
+
+  private updateDistanceScaleDisplay(): void {
+    if (this.distanceScaleDisplay) {
+      this.distanceScaleDisplay.textContent = `Distance: ${this.distanceDisplayValue.toFixed(1)}x`;
     }
   }
 
@@ -173,5 +252,36 @@ export class UIManager {
 
   public onSystemChange(callback: SystemChangeCallback): void {
     this.systemChangeCallbacks.push(callback);
+  }
+
+  public onSizeScaleChange(callback: SizeScaleCallback): void {
+    this.sizeScaleCallbacks.push(callback);
+  }
+
+  public onDistanceScaleChange(callback: DistanceScaleCallback): void {
+    this.distanceScaleCallbacks.push(callback);
+  }
+
+  public getSizeScale(): number {
+    return this.sizeScale;
+  }
+
+  public getDistanceScale(): number {
+    return this.distanceScale;
+  }
+
+  public resetScales(): void {
+    this.sizeDisplayValue = 1.0;
+    this.distanceDisplayValue = 1.0;
+    this.sizeScale = this.sizeDisplayToOutput(1.0); // 2.0
+    this.distanceScale = this.distanceDisplayToOutput(1.0); // 1.8
+    if (this.sizeScaleSlider) {
+      this.sizeScaleSlider.value = "1.0";
+    }
+    if (this.distanceScaleSlider) {
+      this.distanceScaleSlider.value = "1.0";
+    }
+    this.updateSizeScaleDisplay();
+    this.updateDistanceScaleDisplay();
   }
 }

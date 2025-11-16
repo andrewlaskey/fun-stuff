@@ -294,8 +294,12 @@ export class PlayerController {
     }
 
     // === STEP 6: Calculate world position ===
+    // Get actual radius from mesh geometry (accounts for scaling)
+    const meshGeometry = this.currentBodyMesh.geometry as THREE.SphereGeometry;
+    const actualRadius = meshGeometry.parameters.radius;
+
     // Player height above surface
-    const playerHeight = this.currentBodyData.radius * (1 + this.surfaceHeight);
+    const playerHeight = actualRadius * (1 + this.surfaceHeight);
 
     // World position = body center + local position scaled to player height
     const worldPosition = this.currentBodyMesh.position.clone();

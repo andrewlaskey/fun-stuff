@@ -103,6 +103,20 @@
       width: 100%;
       cursor: pointer;
     }
+    .scale-control {
+      margin-top: 10px;
+    }
+    .scale-control span {
+      color: #ffffff;
+      font-family: monospace;
+      font-size: 12px;
+      display: block;
+      margin-bottom: 3px;
+    }
+    .scale-control input[type="range"] {
+      width: 100%;
+      cursor: pointer;
+    }
     #body-info {
       position: absolute;
       bottom: 10px;
@@ -150,7 +164,15 @@
       <button id="pause-button">⏸</button>
       <span id="speed-display">Speed: 1.0x</span>
     </div>
-    <input type="range" id="speed-slider" min="0.1" max="10" step="0.1" value="1.0">
+    <input type="range" id="speed-slider" min="0" max="2" step="0.1" value="1.0">
+    <div class="scale-control">
+      <span id="size-scale-display">Size: 1.0x</span>
+      <input type="range" id="size-scale-slider" min="0.5" max="2" step="0.05" value="1.0">
+    </div>
+    <div class="scale-control">
+      <span id="distance-scale-display">Distance: 1.0x</span>
+      <input type="range" id="distance-scale-slider" min="0.5" max="2" step="0.05" value="1.0">
+    </div>
   </div>
   <div id="body-info">
     <div id="body-name"></div>
