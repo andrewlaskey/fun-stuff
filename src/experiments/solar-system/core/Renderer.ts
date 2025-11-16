@@ -32,10 +32,10 @@ export class Renderer {
 
     // Camera setup
     this.camera = new THREE.PerspectiveCamera(
-      75,
+      50,
       window.innerWidth / window.innerHeight,
       0.1,
-      10000
+      20000
     );
     this.camera.position.set(0, 50, 150);
 
@@ -147,5 +147,10 @@ export class Renderer {
 
   public setStarFieldScale(scale: number): void {
     this.starField.scale.set(scale, scale, scale);
+  }
+
+  public setFOV(fov: number): void {
+    this.camera.fov = fov;
+    this.camera.updateProjectionMatrix();
   }
 }

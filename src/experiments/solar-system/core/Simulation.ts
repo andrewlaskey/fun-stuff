@@ -115,6 +115,10 @@ export class Simulation {
       this.celestialSystem.setDistanceScale(scale);
       this.renderer.setStarFieldScale(scale);
     });
+
+    this.uiManager.onFOVChange((fov) => {
+      this.renderer.setFOV(fov);
+    });
   }
 
   public loadSystem(systemKey: string): void {
@@ -177,6 +181,10 @@ export class Simulation {
       // Adjust camera near plane for walking vs flying
       if (this.playerController.getIsWalkingMode()) {
         this.renderer.setNearPlane(0.001); // Closer for surface viewing
+        // Slow down time when entering walking mode (if not paused)
+        if (!this.uiManager.getIsPaused()) {
+          this.uiManager.setTimeScale(0.1);
+        }
       } else {
         this.renderer.setNearPlane(0.1); // Default for space flying
       }

@@ -16,6 +16,7 @@ type PauseCallback = (isPaused: boolean) => void;
 type SystemChangeCallback = (systemKey: string) => void;
 type SizeScaleCallback = (scale: number) => void;
 type DistanceScaleCallback = (scale: number) => void;
+type FOVChangeCallback = (fov: number) => void;
 
 export class UIManager {
   private infoDiv: HTMLElement | null;
@@ -30,6 +31,8 @@ export class UIManager {
   private sizeScaleDisplay: HTMLSpanElement | null;
   private distanceScaleSlider: HTMLInputElement | null;
   private distanceScaleDisplay: HTMLSpanElement | null;
+  private fovSlider: HTMLInputElement | null;
+  private fovDisplay: HTMLSpanElement | null;
 
   private isPaused: boolean = false;
   private timeScale: number = 1.0;
@@ -37,12 +40,14 @@ export class UIManager {
   private distanceScale: number = 1.8; // Actual output scale
   private sizeDisplayValue: number = 1.0; // Display value (slider position)
   private distanceDisplayValue: number = 1.0; // Display value (slider position)
+  private fov: number = 50;
 
   private timeScaleCallbacks: TimeScaleCallback[] = [];
   private pauseCallbacks: PauseCallback[] = [];
   private systemChangeCallbacks: SystemChangeCallback[] = [];
   private sizeScaleCallbacks: SizeScaleCallback[] = [];
   private distanceScaleCallbacks: DistanceScaleCallback[] = [];
+  private fovChangeCallbacks: FOVChangeCallback[] = [];
 
   constructor() {
     this.infoDiv = document.getElementById("info");
@@ -57,10 +62,13 @@ export class UIManager {
     this.sizeScaleDisplay = document.getElementById("size-scale-display") as HTMLSpanElement;
     this.distanceScaleSlider = document.getElementById("distance-scale-slider") as HTMLInputElement;
     this.distanceScaleDisplay = document.getElementById("distance-scale-display") as HTMLSpanElement;
+    this.fovSlider = document.getElementById("fov-slider") as HTMLInputElement;
+    this.fovDisplay = document.getElementById("fov-display") as HTMLSpanElement;
 
     this.setupTimeControls();
     this.setupSystemDropdown();
     this.setupScaleControls();
+    this.setupFOVControl();
   }
 
   private setupTimeControls(): void {
@@ -159,6 +167,23 @@ export class UIManager {
   private updateDistanceScaleDisplay(): void {
     if (this.distanceScaleDisplay) {
       this.distanceScaleDisplay.textContent = `Distance: ${this.distanceDisplayValue.toFixed(1)}x`;
+    }
+  }
+
+  private setupFOVControl(): void {
+    if (this.fovSlider) {
+      this.fovSlider.addEventListener("input", (e) => {
+        const target = e.target as HTMLInputElement;
+        this.fov = parseFloat(target.value);
+        this.updateFOVDisplay();
+        this.fovChangeCallbacks.forEach((cb) => cb(this.fov));
+      });
+    }
+  }
+
+  private updateFOVDisplay(): void {
+    if (this.fovDisplay) {
+      this.fovDisplay.textContent = `FOV: ${this.fov}°`;
     }
   }
 
@@ -283,5 +308,22 @@ export class UIManager {
     }
     this.updateSizeScaleDisplay();
     this.updateDistanceScaleDisplay();
+  }
+
+  public onFOVChange(callback: FOVChangeCallback): void {
+    this.fovChangeCallbacks.push(callback);
+  }
+
+  public getFOV(): number {
+    return this.fov;
+  }
+
+  public setTimeScale(scale: number): void {
+    this.timeScale = scale;
+    if (this.speedSlider) {
+      this.speedSlider.value = scale.toString();
+    }
+    this.updateSpeedDisplay();
+    this.timeScaleCallbacks.forEach((cb) => cb(this.timeScale));
   }
 }
