@@ -123,6 +123,12 @@ export class Simulation {
 
     this.currentSystemKey = systemKey;
 
+    // Exit walking mode if active
+    if (this.playerController.getIsWalkingMode()) {
+      this.playerController.exitWalkingMode();
+      this.renderer.setNearPlane(0.1); // Reset to flight mode near plane
+    }
+
     // Load celestial bodies
     this.celestialSystem.load(config);
 
@@ -136,13 +142,12 @@ export class Simulation {
     this.bodyPicker.setHoverableBodies(this.celestialSystem.getHoverableBodies());
     this.bodyPicker.resetSelection();
 
-    // Reset player position
+    // Reset player position to above orbital plane, looking at center
+    const distanceScale = this.uiManager.getDistanceScale();
+    const viewDistance = 200 * distanceScale;
+    const viewHeight = 100 * distanceScale;
     this.playerController.setPosition(
-      new THREE.Vector3(
-        config.cameraStart.x,
-        config.cameraStart.y,
-        config.cameraStart.z
-      )
+      new THREE.Vector3(viewDistance, viewHeight, viewDistance)
     );
     this.playerController.pointAt(new THREE.Vector3(0, 0, 0));
 
