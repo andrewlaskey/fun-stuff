@@ -63,6 +63,7 @@ export class PlayerController {
   }
 
   private updateLook(): void {
+    // Handle mouse input
     if (this.inputManager.mouse.isDown) {
       this.yaw -= this.inputManager.mouse.movementX * this.lookSpeed;
 
@@ -77,9 +78,26 @@ export class PlayerController {
       this.pitch = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.pitch));
     }
 
+    // Handle touch input (same logic as mouse)
+    if (this.inputManager.touch.isActive) {
+      this.yaw -= this.inputManager.touch.movementX * this.lookSpeed;
+
+      // Flip y-axis in walking mode for more natural FPS controls
+      if (this.isWalkingMode) {
+        this.pitch += this.inputManager.touch.movementY * this.lookSpeed;
+      } else {
+        this.pitch -= this.inputManager.touch.movementY * this.lookSpeed;
+      }
+
+      // Limit pitch to prevent flipping
+      this.pitch = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.pitch));
+    }
+
     // Reset movement deltas after processing
     this.inputManager.mouse.movementX = 0;
     this.inputManager.mouse.movementY = 0;
+    this.inputManager.touch.movementX = 0;
+    this.inputManager.touch.movementY = 0;
   }
 
   private updateMovement(): void {

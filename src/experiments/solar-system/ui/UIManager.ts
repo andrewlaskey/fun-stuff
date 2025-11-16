@@ -193,9 +193,17 @@ export class UIManager {
     totalBodies: number
   ): void {
     if (this.infoDiv) {
-      let text = "Use WASD to move, Hold Shift to sprint, Mouse drag to look<br>";
-      text += "R: Cycle planets | P: Pause<br>";
-      text += `Selected: ${selectedBody.name} (${selectedIndex + 1}/${totalBodies})`;
+      const isMobile = window.innerWidth <= 768 || ('ontouchstart' in window);
+      let text: string;
+
+      if (isMobile) {
+        text = "Drag to look around | Use D-pad to move<br>";
+        text += `Selected: ${selectedBody.name} (${selectedIndex + 1}/${totalBodies})`;
+      } else {
+        text = "Use WASD to move, Hold Shift to sprint, Mouse drag to look<br>";
+        text += "R: Cycle planets | P: Pause | Tab: Walk Mode<br>";
+        text += `Selected: ${selectedBody.name} (${selectedIndex + 1}/${totalBodies})`;
+      }
       this.infoDiv.innerHTML = text;
     }
   }

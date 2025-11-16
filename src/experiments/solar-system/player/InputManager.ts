@@ -24,14 +24,24 @@ export interface MouseState {
   movementY: number;
 }
 
+export interface TouchState {
+  isActive: boolean;
+  startPosition: { x: number; y: number };
+  lastPosition: { x: number; y: number };
+  movementX: number;
+  movementY: number;
+}
+
 type KeyCallback = (key: string) => void;
 
 export class InputManager {
   public movement: MovementState;
   public mouse: MouseState;
+  public touch: TouchState;
 
   private keyDownCallbacks: KeyCallback[] = [];
   private clickCallbacks: ((event: MouseEvent) => void)[] = [];
+  private tapCallbacks: ((event: TouchEvent) => void)[] = [];
   private domElement: HTMLElement;
 
   constructor(domElement: HTMLElement) {
@@ -52,8 +62,17 @@ export class InputManager {
       movementY: 0,
     };
 
+    this.touch = {
+      isActive: false,
+      startPosition: { x: 0, y: 0 },
+      lastPosition: { x: 0, y: 0 },
+      movementX: 0,
+      movementY: 0,
+    };
+
     this.setupKeyboardListeners();
     this.setupMouseListeners();
+    this.setupTouchListeners();
   }
 
   private setupKeyboardListeners(): void {
@@ -135,12 +154,110 @@ export class InputManager {
     });
   }
 
+  private setupTouchListeners(): void {
+    this.domElement.addEventListener("touchstart", (e) => {
+      // Only handle single touch for camera control
+      // Ignore touches on UI elements
+      const target = e.target as HTMLElement;
+      if (this.isUIElement(target)) {
+        return;
+      }
+
+      if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        this.touch.isActive = true;
+        this.touch.startPosition = { x: touch.clientX, y: touch.clientY };
+        this.touch.lastPosition = { x: touch.clientX, y: touch.clientY };
+        this.touch.movementX = 0;
+        this.touch.movementY = 0;
+      }
+    }, { passive: false });
+
+    document.addEventListener("touchend", (e) => {
+      // Ignore touches on UI elements
+      const target = e.target as HTMLElement;
+      if (this.isUIElement(target)) {
+        return;
+      }
+
+      if (this.touch.isActive && e.changedTouches.length > 0) {
+        const touch = e.changedTouches[0];
+        const dx = touch.clientX - this.touch.startPosition.x;
+        const dy = touch.clientY - this.touch.startPosition.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        // Check if this was a tap (not a drag)
+        if (distance < 10) {
+          this.tapCallbacks.forEach((callback) => callback(e));
+        }
+      }
+
+      this.touch.isActive = false;
+      this.touch.movementX = 0;
+      this.touch.movementY = 0;
+    });
+
+    document.addEventListener("touchmove", (e) => {
+      // Ignore touches on UI elements
+      const target = e.target as HTMLElement;
+      if (this.isUIElement(target)) {
+        return;
+      }
+
+      if (this.touch.isActive && e.touches.length === 1) {
+        const touch = e.touches[0];
+
+        // Calculate movement delta (similar to mouse movementX/Y)
+        this.touch.movementX = touch.clientX - this.touch.lastPosition.x;
+        this.touch.movementY = touch.clientY - this.touch.lastPosition.y;
+
+        // Update last position
+        this.touch.lastPosition = { x: touch.clientX, y: touch.clientY };
+
+        // Prevent scrolling when dragging on canvas
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // Cancel touch on multi-touch
+    this.domElement.addEventListener("touchcancel", () => {
+      this.touch.isActive = false;
+      this.touch.movementX = 0;
+      this.touch.movementY = 0;
+    });
+  }
+
+  private isUIElement(element: HTMLElement): boolean {
+    // Check if the element or any of its parents are UI controls
+    let current: HTMLElement | null = element;
+    while (current) {
+      if (
+        current.tagName === "BUTTON" ||
+        current.tagName === "INPUT" ||
+        current.tagName === "SELECT" ||
+        current.id === "mobile-controls" ||
+        current.id === "dpad" ||
+        current.id === "action-buttons" ||
+        current.id === "mobile-menu-panel" ||
+        current.id === "mobile-menu-btn"
+      ) {
+        return true;
+      }
+      current = current.parentElement;
+    }
+    return false;
+  }
+
   public onKeyDown(callback: KeyCallback): void {
     this.keyDownCallbacks.push(callback);
   }
 
   public onClick(callback: (event: MouseEvent) => void): void {
     this.clickCallbacks.push(callback);
+  }
+
+  public onTap(callback: (event: TouchEvent) => void): void {
+    this.tapCallbacks.push(callback);
   }
 
   public isMoving(): boolean {
@@ -150,5 +267,9 @@ export class InputManager {
       this.movement.left ||
       this.movement.right
     );
+  }
+
+  public isTouchDevice(): boolean {
+    return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
   }
 }
