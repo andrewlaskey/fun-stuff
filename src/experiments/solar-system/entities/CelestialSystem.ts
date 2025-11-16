@@ -89,14 +89,18 @@ export class CelestialSystem {
     // Add orbit path for orbiting bodies
     if (body.distance > 0) {
       this.createOrbitPath(scaledDistance);
+      const initialAngle = body.initialAngle ?? Math.random() * Math.PI * 2;
       this.orbitingBodies.push({
         mesh,
         baseDistance: body.distance,
         distance: scaledDistance,
         orbitSpeed: body.orbitSpeed,
         rotationSpeed: body.rotationSpeed ?? 0.002, // Default rotation speed
-        angle: Math.random() * Math.PI * 2,
+        angle: initialAngle,
       });
+      // Update initial position based on angle
+      mesh.position.x = Math.cos(initialAngle) * scaledDistance;
+      mesh.position.z = Math.sin(initialAngle) * scaledDistance;
     } else if (body.rotationSpeed) {
       // Center body (like Sun) still rotates but doesn't orbit
       this.orbitingBodies.push({

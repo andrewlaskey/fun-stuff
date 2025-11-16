@@ -15,6 +15,7 @@ export interface CelestialBody {
   distance: number;
   orbitSpeed: number;
   rotationSpeed?: number; // Rotation speed around own axis (radians per frame at timeScale=1)
+  initialAngle?: number; // Starting orbital angle in radians (for binary systems, etc.)
   color: number;
   emissive?: number;
 }

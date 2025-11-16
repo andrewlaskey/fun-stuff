@@ -14,6 +14,8 @@ import { jovianSystem } from "./systems/jovian-system";
 import { saturnianSystem } from "./systems/saturnian-system";
 import { alphaCentauriSystem } from "./systems/alpha-centauri";
 import { trappistSystem } from "./systems/trappist-system";
+import { kepler90System } from "./systems/kepler90-system";
+import { kepler47System } from "./systems/kepler47-system";
 import { Simulation } from "./core/Simulation";
 
 // System configurations
@@ -23,6 +25,8 @@ const systems = {
   saturnian: saturnianSystem,
   "alpha-centauri": alphaCentauriSystem,
   trappist: trappistSystem,
+  kepler90: kepler90System,
+  kepler47: kepler47System,
 };
 
 // Create and start simulation
