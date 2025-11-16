@@ -40,7 +40,7 @@ export class UIManager {
   private distanceScale: number = 1.8; // Actual output scale
   private sizeDisplayValue: number = 1.0; // Display value (slider position)
   private distanceDisplayValue: number = 1.0; // Display value (slider position)
-  private fov: number = 50;
+  private fov: number = 75;
 
   private timeScaleCallbacks: TimeScaleCallback[] = [];
   private pauseCallbacks: PauseCallback[] = [];
