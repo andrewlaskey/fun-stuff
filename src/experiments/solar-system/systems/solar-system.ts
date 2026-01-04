@@ -25,6 +25,8 @@ export interface SystemConfig {
   celestialBodies: CelestialBody[];
   cameraStart: { x: number; y: number; z: number };
   centerLightIntensity: number;
+  lightType?: "point" | "directional"; // Point light for star systems, directional for planetary systems
+  lightDirection?: { x: number; y: number; z: number }; // Direction for directional light (optional)
 }
 
 export const solarSystem: SystemConfig = {
@@ -105,5 +107,5 @@ export const solarSystem: SystemConfig = {
     },
   ],
   cameraStart: { x: 0, y: 50, z: 150 },
-  centerLightIntensity: 5,
+  centerLightIntensity: 12,
 };

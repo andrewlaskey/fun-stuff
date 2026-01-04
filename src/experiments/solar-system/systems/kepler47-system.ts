@@ -68,5 +68,5 @@ export const kepler47System: SystemConfig = {
     },
   ],
   cameraStart: { x: 0, y: 80, z: 200 },
-  centerLightIntensity: 4,
+  centerLightIntensity: 10,
 };

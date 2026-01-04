@@ -119,6 +119,9 @@ export class Simulation {
     this.uiManager.onDistanceScaleChange((scale) => {
       this.celestialSystem.setDistanceScale(scale);
       this.renderer.setStarFieldScale(scale);
+      // Update shadow camera range for new distances
+      const maxDistance = this.celestialSystem.getMaxOrbitalDistance();
+      this.renderer.updateShadowCameraRange(maxDistance);
     });
 
     this.uiManager.onFOVChange((fov) => {
@@ -141,8 +144,14 @@ export class Simulation {
     // Load celestial bodies
     this.celestialSystem.load(config);
 
-    // Update renderer lighting
-    this.renderer.setPointLightIntensity(config.centerLightIntensity);
+    // Update renderer lighting based on system type
+    const lightType = config.lightType || "point"; // Default to point light
+    const lightDirection = config.lightDirection || { x: 1, y: 1, z: 1 };
+    this.renderer.setLightType(lightType, config.centerLightIntensity, lightDirection);
+
+    // Update shadow camera range based on system size
+    const maxDistance = this.celestialSystem.getMaxOrbitalDistance();
+    this.renderer.updateShadowCameraRange(maxDistance);
 
     // Apply current distance scale to star field
     this.renderer.setStarFieldScale(this.uiManager.getDistanceScale());
@@ -348,6 +357,8 @@ export class Simulation {
         }
         this.celestialSystem.setDistanceScale(outputScale);
         this.renderer.setStarFieldScale(outputScale);
+        const maxDistance = this.celestialSystem.getMaxOrbitalDistance();
+        this.renderer.updateShadowCameraRange(maxDistance);
         if (mobileDistanceDisplay) {
           mobileDistanceDisplay.textContent = `Distance: ${displayValue.toFixed(1)}x`;
         }

@@ -53,5 +53,5 @@ export const alphaCentauriSystem: SystemConfig = {
     },
   ],
   cameraStart: { x: 0, y: 30, z: 80 },
-  centerLightIntensity: 2, // Dim red dwarf
+  centerLightIntensity: 5, // Dim red dwarf
 };

@@ -92,5 +92,5 @@ export const kepler90System: SystemConfig = {
     },
   ],
   cameraStart: { x: 0, y: 80, z: 200 },
-  centerLightIntensity: 4.5,
+  centerLightIntensity: 11,
 };

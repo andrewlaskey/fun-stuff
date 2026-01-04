@@ -11,6 +11,7 @@
 
 import * as THREE from "three";
 import type { SystemConfig, CelestialBody } from "../systems/solar-system";
+import { BLOOM_SCENE } from "../core/Renderer";
 
 interface OrbitingBody {
   mesh: THREE.Mesh;
@@ -57,15 +58,45 @@ export class CelestialSystem {
     const scaledDistance = body.distance * this.distanceScale;
 
     const geometry = new THREE.SphereGeometry(scaledRadius, 32, 32);
-    const material = new THREE.MeshStandardMaterial({
-      color: body.color,
-      emissive: body.emissive || body.color,
-      emissiveIntensity: body.emissive ? 1 : 0.2,
-      metalness: 0.1,
-      roughness: 0.8,
-    });
+
+    let material: THREE.Material;
+    const isStar = body.emissive !== undefined;
+
+    if (isStar) {
+      // Use emissive material for stars - bloom will handle the glow
+      material = new THREE.MeshBasicMaterial({
+        color: body.emissive,
+      });
+    } else {
+      // Standard material for planets
+      material = new THREE.MeshStandardMaterial({
+        color: body.color,
+        emissive: body.emissive || 0x000000,
+        emissiveIntensity: body.emissive ? 1 : 0,
+        metalness: 0.1,
+        roughness: 0.8,
+      });
+    }
 
     const mesh = new THREE.Mesh(geometry, material);
+
+    // Configure shadows based on body type and size
+    // Stars have emissive property, planets at center (Jupiter/Saturn) don't
+    if (!isStar) {
+      // All non-star bodies receive shadows (including planets at center)
+      mesh.receiveShadow = true;
+
+      // Only larger bodies cast shadows (reduces overhead)
+      if (body.radius >= 3) {
+        mesh.castShadow = true;
+      }
+    } else {
+      // Stars never receive shadows (they emit light)
+      mesh.receiveShadow = false;
+      mesh.castShadow = false;
+      // Add stars to the bloom layer for selective bloom effect
+      mesh.layers.enable(BLOOM_SCENE);
+    }
 
     if (scaledDistance === 0) {
       mesh.position.set(0, 0, 0);
@@ -133,6 +164,11 @@ export class CelestialSystem {
     });
     const ringMesh = new THREE.Mesh(ringGeometry, ringMaterial);
     ringMesh.rotation.x = Math.PI / 2;
+
+    // Rings receive shadows (creates beautiful eclipse effects)
+    // but don't cast shadows (thin, transparent)
+    ringMesh.receiveShadow = true;
+    ringMesh.castShadow = false;
 
     if (scaledDistance === 0) {
       ringMesh.position.set(0, 0, 0);
@@ -240,6 +276,14 @@ export class CelestialSystem {
       mesh.geometry.dispose();
       mesh.geometry = new THREE.SphereGeometry(newRadius, 32, 32);
 
+      // Reapply shadow settings after geometry change
+      const isStar = body.emissive !== undefined;
+      if (!isStar && body.radius * scale >= 3) {
+        mesh.castShadow = true;
+      } else if (!isStar) {
+        mesh.castShadow = false;
+      }
+
       // Update ring if present
       if (ringMesh) {
         ringMesh.geometry.dispose();
@@ -302,5 +346,19 @@ export class CelestialSystem {
 
   public getDistanceScale(): number {
     return this.distanceScale;
+  }
+
+  private calculateMaxOrbitalDistance(): number {
+    let maxDistance = 0;
+    this.orbitingBodies.forEach((body) => {
+      if (body.distance > maxDistance) {
+        maxDistance = body.distance;
+      }
+    });
+    return maxDistance;
+  }
+
+  public getMaxOrbitalDistance(): number {
+    return this.calculateMaxOrbitalDistance();
   }
 }

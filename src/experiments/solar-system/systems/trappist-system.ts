@@ -84,5 +84,5 @@ export const trappistSystem: SystemConfig = {
     },
   ],
   cameraStart: { x: 0, y: 30, z: 80 },
-  centerLightIntensity: 2.5, // Dimmer red dwarf
+  centerLightIntensity: 6.5, // Dimmer red dwarf
 };

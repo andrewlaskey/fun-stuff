@@ -20,7 +20,6 @@ export const saturnianSystem: SystemConfig = {
       distance: 0,
       orbitSpeed: 0,
       color: 0xfad5a5,
-      emissive: 0xfad5a5,
     },
     {
       name: "Mimas",
@@ -73,5 +72,7 @@ export const saturnianSystem: SystemConfig = {
     },
   ],
   cameraStart: { x: 0, y: 40, z: 100 },
-  centerLightIntensity: 3,
+  centerLightIntensity: 8,
+  lightType: "directional",
+  lightDirection: { x: 1, y: 0.28, z: 0 }, // Edge-on lighting from the side
 };

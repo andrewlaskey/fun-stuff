@@ -20,7 +20,6 @@ export const jovianSystem: SystemConfig = {
       distance: 0,
       orbitSpeed: 0,
       color: 0xc88b3a,
-      emissive: 0xc88b3a,
     },
     {
       name: "Io",
@@ -66,5 +65,7 @@ export const jovianSystem: SystemConfig = {
     },
   ],
   cameraStart: { x: 0, y: 30, z: 80 },
-  centerLightIntensity: 3,
+  centerLightIntensity: 8,
+  lightType: "directional",
+  lightDirection: { x: 1, y: 0, z: 0 }, // Edge-on lighting from the side
 };
