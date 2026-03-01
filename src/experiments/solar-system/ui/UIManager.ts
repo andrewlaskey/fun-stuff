@@ -33,7 +33,9 @@ export class UIManager {
   private distanceScaleDisplay: HTMLSpanElement | null;
   private fovSlider: HTMLInputElement | null;
   private fovDisplay: HTMLSpanElement | null;
-
+  private uiContainer: HTMLElement | null;
+  
+  private showUI: boolean = true;
   private isPaused: boolean = false;
   private timeScale: number = 1.0;
   private sizeScale: number = 2.0; // Actual output scale
@@ -64,6 +66,7 @@ export class UIManager {
     this.distanceScaleDisplay = document.getElementById("distance-scale-display") as HTMLSpanElement;
     this.fovSlider = document.getElementById("fov-slider") as HTMLInputElement;
     this.fovDisplay = document.getElementById("fov-display") as HTMLSpanElement;
+    this.uiContainer= document.getElementById("ui")
 
     this.setupTimeControls();
     this.setupSystemDropdown();
@@ -333,5 +336,13 @@ export class UIManager {
     }
     this.updateSpeedDisplay();
     this.timeScaleCallbacks.forEach((cb) => cb(this.timeScale));
+  }
+
+  public toggleUI(): void {
+    this.showUI = !this.showUI;
+    const displayValue = this.showUI ? "block" : "none";
+    if (this.uiContainer) {
+      this.uiContainer.style.display = displayValue;
+    }
   }
 }

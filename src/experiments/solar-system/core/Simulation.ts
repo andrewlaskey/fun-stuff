@@ -76,6 +76,9 @@ export class Simulation {
         case "tab":
           this.toggleWalkingMode();
           break;
+        case "h":
+          this.uiManager.toggleUI();
+          break;
       }
     });
 
