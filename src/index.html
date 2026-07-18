@@ -4,20 +4,125 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Web Experiments</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 2rem;
+      font-family: system-ui, sans-serif;
+      background: #111;
+      color: #eee;
+    }
+
+    h1 {
+      margin: 0 0 0.5rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    .subtitle {
+      margin: 0 0 2rem;
+      font-size: 0.95rem;
+      color: #666;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .card {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .card:hover .card-title {
+      color: #fff;
+    }
+
+    .card-image {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      background: #222;
+      border-radius: 6px;
+    }
+
+    .card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover .card-image img {
+      transform: scale(1.03);
+    }
+
+    .card-title {
+      margin: 0.6rem 0 0;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #ccc;
+      transition: color 0.15s ease;
+    }
+  </style>
 </head>
 <body>
   <h1>Web Experiments</h1>
-  <ul>
-    <li><a href="./experiments/flashing-tunnel/index.html">Flashing Tunnel</a></li>
-    <li><a href="./experiments/mellings/index.html">Mellings</a></li>
-    <li><a href="./experiments/avatars/index.html">Avatars</a></li>
-    <li><a href="./experiments/pixi/index.html">Pixi Test</a></li>
-    <li><a href="./experiments/snl-cast-class/index.html">SNL Castmember Timeline</a></li>
-    <li><a href="./experiments/solar-system/index.html">Solar System</a></li>
-    <li><a href="./experiments/in-billions/index.html">In Billions</a></li>
-    <li><a href="./experiments/planet-gen/index.html">Planet Gen</a></li>
+  <p class="subtitle">A collection of small experimental projects to play around with different ideas.</p>
+  <div class="grid">
+    <a class="card" href="./experiments/flashing-tunnel/index.html">
+      <div class="card-image">
+        <img src="./public/images/tunnel.png" alt="Flashing Tunnel">
+      </div>
+      <p class="card-title">Flashing Tunnel</p>
+    </a>
+    <a class="card" href="./experiments/mellings/index.html">
+      <div class="card-image">
+        <img src="./public/images/mellings.png" alt="Mellings">
+      </div>
+      <p class="card-title">Mellings</p>
+    </a>
+    <a class="card" href="./experiments/avatars/index.html">
+      <div class="card-image">
+        <img src="./public/images/avatars.png" alt="Avatars">
+      </div>
+      <p class="card-title">Avatars</p>
+    </a>
+    <a class="card" href="./experiments/snl-cast-class/index.html">
+      <div class="card-image">
+        <img src="./public/images/snl-cast.png" alt="SNL Castmember Timeline">
+      </div>
+      <p class="card-title">SNL Castmember Timeline</p>
+    </a>
+    <a class="card" href="./experiments/solar-system/index.html">
+      <div class="card-image">
+        <img src="./public/images/solar-system.png" alt="Solar System">
+      </div>
+      <p class="card-title">Solar System</p>
+    </a>
+    <a class="card" href="./experiments/in-billions/index.html">
+      <div class="card-image">
+        <img src="./public/images/in-billions.png" alt="In Billions">
+      </div>
+      <p class="card-title">In Billions</p>
+    </a>
+    <a class="card" href="./experiments/planet-gen/index.html">
+      <div class="card-image">
+        <img src="./public/images/planet-gen.png" alt="Planet Gen">
+      </div>
+      <p class="card-title">Planet Gen</p>
+    </a>
     <!-- Add more experiments here as needed -->
-  </ul>
+  </div>
   <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
   <script>
     kofiWidgetOverlay.draw('timbertales', {
