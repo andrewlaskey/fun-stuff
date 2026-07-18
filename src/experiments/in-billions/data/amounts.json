@@ -474,5 +474,19 @@
     "sourceUrl": "https://americansfortaxfairness.org/billionaires-spending-39-times-federal-elections-since-citizens-united-supreme-court-decision-2010/",
     "amount": 1.2,
     "category": 2
+  },
+  {
+    "title": "🎓 Bernie Sanders College for All Act",
+    "description": "Annual federal funding to eliminate tuition at public higher ed.",
+    "sourceUrl": "https://www.sanders.senate.gov/wp-content/uploads/college-for-all-fact-sheet-2019.pdf",
+    "amount": 48,
+    "category": 1
+  },
+  {
+    "title": "⚔️ 5 Months of Iran War",
+    "description": "Estimated cost to taxpayers as of July 2026",
+    "sourceUrl": "https://militaryspend.org/us-iran-war",
+    "amount": 37,
+    "category": 3
   }
 ]
