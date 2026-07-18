@@ -16,18 +16,28 @@
     "@types/lodash": "^4.17.15",
     "@types/matter-js": "^0.19.8",
     "@types/p5": "^1.7.6",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.7.0",
     "vite": "^5.4.11",
     "vitest": "^2.1.8"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/vite": "^4.3.3",
     "@types/three": "^0.180.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "gsap": "^3.12.7",
     "lodash": "^4.17.21",
+    "lucide-react": "^1.25.0",
     "matter-js": "^0.20.0",
     "p5": "^1.11.2",
     "pixi.js": "^8.10.1",
+    "postcss": "^8.5.19",
     "radash": "^12.1.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "tailwindcss": "^4.3.3",
     "three": "^0.180.0",
     "vue": "^3.5.13"
   }

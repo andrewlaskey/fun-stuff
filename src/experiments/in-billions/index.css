@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@theme inline {
+    --color-bright-pink: #ef476f;
+    --color-sunglow: #ffd166;
+    --color-emerald: #06d6a0;
+    --color-blue-ncs: #118ab2;
+    --color-midnight-green: #073b4c;
+    --color-warm-autumn-glow: #F77F00;
+}

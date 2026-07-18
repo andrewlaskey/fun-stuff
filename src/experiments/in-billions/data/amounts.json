@@ -1,0 +1,478 @@
+[
+  {
+    "title": "🏠 Housing All Homeless",
+    "description": "Annual cost to house current sheltered homeless population",
+    "sourceUrl": "https://endhomelessness.org/resources/research-and-analysis/how-much-would-it-cost-to-provide-housing-first-to-all-households-staying-in-homeless-shelters/",
+    "amount": 9.6,
+    "category": 1
+  },
+  {
+    "title": "🏥 Medicare for All (Bernie Sanders Plan)",
+    "description": "Net cost with taxes and savings factored in",
+    "sourceUrl": "https://www.crfb.org/papers/primary-care-estimating-democratic-candidates-health-plans",
+    "amount": 12950,
+    "category": 1
+  },
+  {
+    "title": "🏥 Medicare for All (Elizabeth Warren Plan)", 
+    "description": "Net cost with taxes and savings factored in",
+    "sourceUrl": "https://www.crfb.org/papers/primary-care-estimating-democratic-candidates-health-plans",
+    "amount": 6100,
+    "category": 1
+  },
+  {
+    "title": "👮‍♂️ ICE Annual Budget FY 2025",
+    "description": "Immigration and Customs Enforcement operations budget",
+    "sourceUrl": "https://usafacts.org/explainers/what-does-the-us-government-do/subagency/us-immigration-and-customs-enforcement/",
+    "amount": 10.42,
+    "category": 3
+  },
+  {
+    "title": "👮‍♂️ ICE Budget in \"Big Beautiful Bill\"",
+    "description": "Newly approved and passed annual budget for ICE passed in 2025",
+    "sourceUrl": "https://www.the-independent.com/news/world/americas/us-politics/ice-funding-world-militaries-b2790466.html",
+    "amount": 27.7,
+    "category": 3
+  },
+  {
+    "title": "🏗️ Money for completing Mexico Border Wall",
+    "description": "Funding approved for completing the border wall in the One Big Beautiful Bill Act",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Mexico%E2%80%93United_States_border_wall",
+    "amount": 46.5,
+    "category": 3
+  },
+  {
+    "title": "🧑‍🧑‍🧒‍🧒 US Median Household Income",
+    "description": "Individual household median annual income",
+    "sourceUrl": "https://www.census.gov/library/publications/2024/demo/p60-282.html",
+    "amount": 0.0000806,
+    "category": 2
+  },
+  {
+    "title": "🎭 George Clooney Net Worth",
+    "description": "Actor and businessman estimated wealth",
+    "sourceUrl": "https://www.celebritynetworth.com/richest-celebrities/actors/george-clooney-net-worth/",
+    "amount": 0.5,
+    "category": 2
+  },
+  {
+    "title": "🪖 US Defense Budget FY 2024",
+    "description": "Department of Defense annual appropriations",
+    "sourceUrl": "https://usafacts.org/articles/how-much-does-the-us-spend-on-the-military/",
+    "amount": 841.4,
+    "category": 3
+  },
+  {
+    "title": "🛰️ NASA Budget FY 2024",
+    "description": "National Aeronautics and Space Administration annual budget",
+    "sourceUrl": "https://www.planetary.org/space-policy/nasas-fy-2024-budget",
+    "amount": 25,
+    "category": 3
+  },
+  {
+    "title": "🏗️ Infrastructure Investment Act (Annual)",
+    "description": "Annual spending from 5-year infrastructure bill",
+    "sourceUrl": "https://www.npr.org/2021/11/05/1050012853/the-house-has-passed-the-1-trillion-infrastructure-plan-sending-it-to-bidens-des",
+    "amount": 110,
+    "category": 3
+  },
+  {
+    "title": "📈 Nvidia Market Cap",
+    "description": "Technology company market valuation",
+    "sourceUrl": "https://finance.yahoo.com/",
+    "amount": 4160,
+    "category": 5
+  },
+  {
+    "title": "📈 Apple Market Cap",
+    "description": "Technology company market valuation",
+    "sourceUrl": "https://finance.yahoo.com/",
+    "amount": 3470,
+    "category": 5
+  },
+  {
+    "title": "📈 Microsoft Market Cap",
+    "description": "Technology company market valuation", 
+    "sourceUrl": "https://finance.yahoo.com/",
+    "amount": 3370,
+    "category": 5
+  },
+  {
+    "title": "🧑‍🎓 Student Debt Forgiveness (Biden Plan)",
+    "description": "One-time cost of blocked student loan forgiveness",
+    "sourceUrl": "https://budgetmodel.wharton.upenn.edu/",
+    "amount": 519,
+    "category": 1
+  },
+  {
+    "title": "🇺🇸 US Foreign Aid FY 2023",
+    "description": "Annual international assistance spending",
+    "sourceUrl": "https://usafacts.org/answers/how-much-foreign-aid-does-the-us-provide/country/united-states/",
+    "amount": 99.8,
+    "category": 3
+  },
+  {
+    "title": "🏠 Federal Homeless Assistance",
+    "description": "Current annual federal spending on homelessness",
+    "sourceUrl": "https://endhomelessness.org/",
+    "amount": 5.4,
+    "category": 3
+  },
+  {
+    "title": "⚖️ US Incarceration Costs",
+    "description": "Annual cost of federal, state, and local prison systems",
+    "sourceUrl": "https://bjs.ojp.gov/sites/g/files/xyckuh236/files/media/document/jeeus17.pdf",
+    "amount": 89.2,
+    "category": 3
+  },
+  {
+    "title": "👮‍♂️ US Policing Costs",
+    "description": "Annual spending on police departments nationwide",
+    "sourceUrl": "https://bjs.ojp.gov/sites/g/files/xyckuh236/files/media/document/jeeus17.pdf",
+    "amount": 149.0,
+    "category": 3
+  },
+  {
+    "title": "👨🏻‍💼 Bill Gates Net Worth",
+    "description": "Microsoft co-founder estimated wealth",
+    "sourceUrl": "https://www.bloomberg.com/billionaires/",
+    "amount": 123,
+    "category": 2
+  },
+  {
+    "title": "👨🏻‍💼 Elon Musk Net Worth",
+    "description": "Tesla and SpaceX CEO estimated wealth",
+    "sourceUrl": "https://www.bloomberg.com/billionaires/",
+    "amount": 396,
+    "category": 2
+  },
+  {
+    "title": "👨🏻‍💼 Jeff Bezos Net Worth",
+    "description": "Amazon founder estimated wealth",
+    "sourceUrl": "https://www.bloomberg.com/billionaires/",
+    "amount": 243,
+    "category": 2
+  },
+  {
+    "title": "👨🏻‍💼 Warren Buffett Net Worth",
+    "description": "Berkshire Hathaway CEO estimated wealth",
+    "sourceUrl": "https://www.bloomberg.com/billionaires/",
+    "amount": 141,
+    "category": 2
+  },
+  {
+    "title": "🏠 Average US Home Price",
+    "description": "Median existing home price nationally",
+    "sourceUrl": "https://www.bankrate.com/real-estate/existing-home-sales/",
+    "amount": 0.000435,
+    "category": 4
+  },
+  {
+    "title": "🪖 China Defense Budget FY 2024",
+    "description": "Annual military spending budget",
+    "sourceUrl": "https://www.sipri.org/sites/default/files/2025-04/2504_fs_milex_2024.pdf",
+    "amount": 314,
+    "category": 3
+  },
+  {
+    "title": "💸 Total US Federal Budget FY 2024",
+    "description": "Complete federal government spending all programs",
+    "sourceUrl": "https://www.cbo.gov/publication/60843/html",
+    "amount": 6752,
+    "category": 3
+  },
+  {
+    "title": "💰 IRS Tax Revenue Collection FY 2024",
+    "description": "Annual federal tax revenue collected",
+    "sourceUrl": "https://www.cbo.gov/publication/60843/html",
+    "amount": 4919,
+    "category": 3
+  },
+  {
+    "title": "🎭 Jason Momoa Net Worth",
+    "description": "Actor and producer estimated wealth",
+    "sourceUrl": "https://www.celebritynetworth.com/richest-celebrities/actors/jason-momoa-net-worth/",
+    "amount": 0.044,
+    "category": 2
+  },
+  {
+    "title": "🏠 Average LA Home Price",
+    "description": "Median home price in Los Angeles area",
+    "sourceUrl": "https://www.zillow.com/home-values/12447/los-angeles-ca/",
+    "amount": 0.00095,
+    "category": 4
+  },
+  {
+    "title": "🛥️ 40ft Luxury Yacht",
+    "description": "Example cost of a high-end yacht",
+    "sourceUrl": "https://www.boatinternational.com/yachts-for-sale/homecoming-horizon-2010",
+    "amount": 0.00749,
+    "category": 4
+  },
+  {
+    "title": "🎭  Scarlett Johansson Net Worth",
+    "description": "Actor and producer estimated wealth",
+    "sourceUrl": "https://www.hellomagazine.com/film/843484/scarlett-johansson-net-worth-highest-grossing-star-revealed/",
+    "amount": 0.165,
+    "category": 2
+  },
+  {
+    "title": "📤 NY sent to federal government vs received",
+    "description": "Difference between New York's federal tax contributions vs federal spending",
+    "sourceUrl": "https://usafacts.org/articles/which-states-contribute-the-most-and-least-to-federal-revenue/",
+    "amount": 89,
+    "category": 3
+  },
+  {
+    "title": "📥 Virgina received vs sent to federal government",
+    "description": "Virgina has the largest gap between what they receive from the federal government vs what they send in taxes",
+    "sourceUrl": "https://usafacts.org/articles/which-states-contribute-the-most-and-least-to-federal-revenue/",
+    "amount": 79,
+    "category": 3
+  },
+  {
+    "title": "👩🏾‍🏫 Average US K-12 Teacher Salary",
+    "description": "Annual salary for public school teachers nationwide",
+    "sourceUrl": "https://www.nea.org/resource-library/educator-pay-and-student-spending-how-does-your-state-rank",
+    "amount": 0.000074,
+    "category": 2
+  },
+  {
+    "title": "👩‍⚕️ Average US Physician Salary",
+    "description": "Annual total compensation for medical doctors",
+    "sourceUrl": "https://www.fiercehealthcare.com/providers/physician-compensation-rose-36-2024-not-all-specialties-got-raise",
+    "amount": 0.000376,
+    "category": 2
+  },
+  {
+    "title": "✈️ Boeing 737 MAX 8 Aircraft Cost",
+    "description": "List price for new Boeing 737 aircraft",
+    "sourceUrl": "https://simpleflying.com/boeing-737-max-cost-2025/",
+    "amount": 0.122,
+    "category": 4
+  },
+  {
+    "title": "🥪 Universal Free School Lunch Program",
+    "description": "Estimated annual cost for nationwide free lunch program",
+    "sourceUrl": "https://www.wbur.org/onpoint/2022/07/07/lessons-from-americas-brief-experiment-with-universal-free-school-meals",
+    "amount": 30.0,
+    "category": 1
+  },
+  {
+    "title": "👾 Meta VR/AR Technology Investment",
+    "description": "Cumulative investment in virtual and augmented reality",
+    "sourceUrl": "https://finance.yahoo.com/news/metas-reality-check-inside-the-45-billion-cash-burn-at-reality-labs-125717347.html",
+    "amount": 67.0,
+    "category": 5
+  },
+  {
+    "title": "🚀 Apollo Program Cost (Inflation-Adjusted)",
+    "description": "NASA Apollo program total cost in 2025 dollars",
+    "sourceUrl": "https://www.planetary.org/space-policy/cost-of-apollo",
+    "amount": 319.2,
+    "category": 3
+  },
+  {
+    "title": "💰 10 year revenue Warren's Ultra-Millionaire Tax",
+    "description": "Estimated revenue from Elizabeth Warren's proposed wealth tax",
+    "sourceUrl": "https://elizabethwarren.com/plans/ultra-millionaire-tax",
+    "amount": 3750,
+    "category": 1
+  },
+  {
+    "title": "🏗️ Boston Big Dig Project Cost",
+    "description": "Total cost of Boston's Central Artery/Tunnel Project",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Big_Dig",
+    "amount": 21.5,
+    "category": 3
+  },
+  {
+    "title": "🚄 Estimated cost California High Speed Rail",
+    "description": "Projected cost of California's high-speed rail system",
+    "sourceUrl": "https://en.wikipedia.org/wiki/California_High-Speed_Rail#:~:text=Construction%20of%20the%20IOS%20as,through%20partnership%20with%20private%20capital.",
+    "amount": 130,
+    "category": 3
+  },
+  {
+    "title": "🛢️ Penalties to BP for Deepwater Horizon Spill",
+    "description": "Cleanup costs, charges, and penalties as of 2018 by BP for the 2010 oil spill",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Deepwater_Horizon_oil_spill",
+    "amount": 65,
+    "category": 5
+  },
+  {
+    "title": "🛢️ Global subsidies for fossil fuels (explicit)",
+    "description": "Total global subsidies for fossil fuels in 2022",
+    "sourceUrl": "https://ourworldindata.org/how-much-subsidies-fossil-fuels",
+    "amount": 1500,
+    "category": 3
+  },
+  {
+    "title": "🛢️ Global fossil fuel subsidies (implicit)",
+    "description": "Estimated implicit subsidies for fossil fuels in 2022",
+    "sourceUrl": "https://ourworldindata.org/how-much-subsidies-fossil-fuels",
+    "amount": 7000,
+    "category": 3
+  },
+  {
+    "title": "🛰️ Cost of James Webb Space Telescope",
+    "description": "Total cost of the James Webb Space Telescope project",
+    "sourceUrl": "https://science.utah.edu/news/james-webb-space-telescope/",
+    "amount": 10,
+    "category": 3
+  },
+  {
+    "title": "🚊 US public spending trains FY 2023",
+    "description": "Federal, state, and local government spending on mass transit and rail transportation.",
+    "sourceUrl": "https://www.cbo.gov/publication/60874",
+    "amount": 99,
+    "category": 3
+  },
+  {
+    "title": "🚗 US public spending highways FY 2023",
+    "description": "Federal, state, and local government spending on highways.",
+    "sourceUrl": "https://www.cbo.gov/publication/60874",
+    "amount": 249,
+    "category": 3
+  },
+  {
+    "title": "💸 Total US household debt",
+    "description": "",
+    "sourceUrl": "https://www.newyorkfed.org/microeconomics/hhdc",
+    "amount": 18390,
+    "category": 2
+  },
+  {
+    "title": "💸 Cost of global tax havens",
+    "description": "",
+    "sourceUrl": "https://www.imf.org/en/Publications/fandd/issues/2019/09/tackling-global-tax-havens-shaxon",
+    "amount": 600,
+    "category": 3
+  },
+  {
+    "title": "🛒 SNAP FY 2024",
+    "description": "Supplemental Nutrition Assistance Program annual budget",
+    "sourceUrl": "https://usafacts.org/answers/how-much-does-the-federal-government-spend-on-snap-every-year/country/united-states/",
+    "amount": 100.3,
+    "category": 3
+  },
+  {
+    "title": "💰 UBI of $1000/month every adult in US",
+    "description": "Annual cost of universal basic income for all US adults",
+    "sourceUrl": "https://www.ubicenter.org/what-is-ubi/why-not-ubi/",
+    "amount": 3100,
+    "category": 1
+  },
+  {
+    "title": "📬 US Postal Service",
+    "description": "Annual budget for the United States Postal Service",
+    "sourceUrl": "https://usafacts.org/government-spending/",
+    "amount": 3.97,
+    "category": 3
+  },
+  {
+    "title": "🏦 2008 Bank Bailout (TARP)",
+    "description": "Total cost of Troubled Asset Relief Program",
+    "sourceUrl": "https://en.wikipedia.org/wiki/Emergency_Economic_Stabilization_Act_of_2008",
+    "amount": 700,
+    "category": 3
+  },
+  {
+    "title": "📚 Harvard University's endowment",
+    "description": "Total value of Harvard's endowment fund",
+    "sourceUrl": "https://www.harvard.edu/about/endowment/",
+    "amount": 53.2,
+    "category": 5
+  },
+  {
+    "title": "📚 Public school funding",
+    "description": "Total annual funding for K-12 public schools in the US from all sources",
+    "sourceUrl": "https://usafacts.org/answers/how-are-public-schools-in-the-us-funded/country/united-states/",
+    "amount": 909,
+    "category": 3
+  },
+  {
+    "title": "🧑‍🎓 Average cost of college (private)",
+    "description": "Average total cost of attending a private 4-year college in the US",
+    "sourceUrl": "https://www.usnews.com/education/best-colleges/paying-for-college/articles/paying-for-college-infographic",
+    "amount": 0.000174,
+    "category": 4
+  },
+  {
+    "title": "🧑‍🎓 Average cost of college (public)",
+    "description": "Average total cost of attending a public 4-year college in the US",
+    "sourceUrl": "https://www.usnews.com/education/best-colleges/paying-for-college/articles/paying-for-college-infographic",
+    "amount": 0.000044,
+    "category": 4
+  },
+  {
+    "title": "💩 Trump family profits from presidency",
+    "description": "Estimated profits from Trump family businesses during presidency",
+    "sourceUrl": "https://www.newyorker.com/magazine/2025/08/18/the-number",
+    "amount": 3.4,
+    "category": 2
+  },
+  {
+    "title": "🏰 Mark Zuckerberg's Hawaii compound",
+    "description": "Estimated value of Mark Zuckerberg's private Hawaiian estate",
+    "sourceUrl": "https://www.architecturaldigest.com/story/mark-zuckerberg-quietly-added-1000-acres-to-his-kauai-compound",
+    "amount": 0.3,
+    "category": 2
+  },
+  {
+    "title": "💒 Jeff Bezos' Venice wedding",
+    "description": "Estimated cost of Jeff Bezos' wedding in Venice",
+    "sourceUrl": "https://www.newsweek.com/jeff-bezos-venice-wedding-was-relatively-cheap-2092162",
+    "amount": 0.056,
+    "category": 2
+  },
+  {
+    "title": "⚡️ IRA Clean Energy Tax Credits",
+    "description": "Investment from clean energy tax credits in the Inflation Reduction Act",
+    "sourceUrl": "https://cleanpower.org/resources/economy-wide-benefits-of-energy-tax-credits/",
+    "amount": 740,
+    "category": 3
+  },
+  {
+    "title": "🤑 Household income and savings from IRA",
+    "description": "Estimated household income and savings from the Inflation Reduction Act",
+    "sourceUrl": "https://cleanpower.org/resources/economy-wide-benefits-of-energy-tax-credits/",
+    "amount": 846,
+    "category": 2
+  },
+  {
+    "title": "🤑 Amount added to US GDP from IRA",
+    "description": "Estimated increase in US GDP from the Inflation Reduction Act",
+    "sourceUrl": "https://cleanpower.org/resources/economy-wide-benefits-of-energy-tax-credits/",
+    "amount": 1900,
+    "category": 3
+  },
+  {
+    "title": "😷 Annual health costs from fossil fuel pollution",
+    "description": "",
+    "amount": 820,
+    "category": 3,
+    "sourceUrl": "https://cleanpower.org/resources/economy-wide-benefits-of-energy-tax-credits/"   
+  },
+  {
+    "title": "💸 10 YR Impact of OBBBA to national debt",
+    "description": "Estimated impact of the One Big Beautiful Bill Act on the national debt",
+    "sourceUrl": "https://www.crfb.org/blogs/breaking-down-one-big-beautiful-bill",
+    "amount": 3000,
+    "category": 3
+  },
+  {
+    "title": "🗳️ Political contributions of billionaires 2010",
+    "description": "Pre-Citizens United political contributions by billionaires",
+    "sourceUrl": "https://americansfortaxfairness.org/billionaires-spending-39-times-federal-elections-since-citizens-united-supreme-court-decision-2010/",
+    "amount": 0.031,
+    "category": 2
+  },
+  {
+    "title": "🗳️ Political contributions of billionaires 2020",
+    "description": "Post-Citizens United political contributions by billionaires",
+    "sourceUrl": "https://americansfortaxfairness.org/billionaires-spending-39-times-federal-elections-since-citizens-united-supreme-court-decision-2010/",
+    "amount": 1.2,
+    "category": 2
+  }
+]
