@@ -1,5 +1,6 @@
 import { Body, Vector, Bodies, Composite, Engine, Events } from "matter-js";
 import gsap from "gsap";
+import { Container, Graphics } from "pixi.js";
 
 import { COLORS } from "../utils/constants";
 import { Melling } from "./Melling";
@@ -11,6 +12,7 @@ export class Level {
   public startLocation: Vector;
   public goal: Body;
   public platforms: Platform[] = [];
+  public view: Container;
 
   public readonly startWidth: number = 60;
 
@@ -40,6 +42,24 @@ export class Level {
         const platform = new Platform(platformConfig);
         this.platforms.push(platform);
     }
+
+    this.view = new Container();
+
+    const startMarker = new Graphics()
+      .rect(0, 0, this.startWidth, 5)
+      .fill(COLORS["English Violet"]);
+    startMarker.position.set(this.startLocation.x, this.startLocation.y);
+
+    const goalMarker = new Graphics()
+      .rect(-this.goalWidth / 2, -this.goalHeight / 2, this.goalWidth, this.goalHeight)
+      .fill(COLORS["English Violet"]);
+    goalMarker.position.set(this.goal.position.x, this.goal.position.y);
+
+    this.view.addChild(startMarker, goalMarker);
+
+    for (const platform of this.platforms) {
+      this.view.addChild(platform.view);
+    }
   }
 
   setupPhysics(engine: Engine, mellings: Melling[]): void {
@@ -47,27 +67,6 @@ export class Level {
 
     for (const platform of this.platforms) {
       platform.setupPhysics(engine);
-    }
-  }
-
-  draw(ctx: CanvasRenderingContext2D): void {
-    ctx.fillStyle = COLORS["English Violet"];
-    ctx.beginPath();
-    ctx.rect(this.startLocation.x, this.startLocation.y, this.startWidth, 5);
-    ctx.fill();
-
-    ctx.fillStyle = COLORS["English Violet"];
-    ctx.beginPath();
-    ctx.rect(
-      this.goal.position.x - this.goalWidth / 2,
-      this.goal.position.y - this.goalHeight / 2,
-      this.goalWidth,
-      this.goalHeight
-    );
-    ctx.fill();
-
-    for (const platform of this.platforms) {
-      platform.draw(ctx);
     }
   }
 }

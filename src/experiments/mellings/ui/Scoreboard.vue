@@ -4,11 +4,12 @@ import { gsap } from "gsap";
 
 interface ScoreboardProps {
   alive: number;
+  total: number;
   saved: number;
   level: number;
 }
 
-const { alive = 0, saved = 0, level = 0 } = defineProps<ScoreboardProps>();
+const { alive = 0, total = 0, saved = 0, level = 0 } = defineProps<ScoreboardProps>();
 const aliveRef = ref<HTMLElement>();
 const savedRef = ref<HTMLElement>();
 const displayAlive = ref(alive);
@@ -63,7 +64,7 @@ watch(
   <div class="scoreboard">
     <div class="melling-score">
       <div class="score">
-        🦔<span ref="aliveRef">{{ displayAlive }}</span>
+        🦔<span ref="aliveRef">{{ displayAlive }}</span>/{{ total }}
       </div>
       <div class="score">
         🏁<span ref="savedRef">{{ displaysaved }}</span>

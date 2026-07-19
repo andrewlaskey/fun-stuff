@@ -1,5 +1,6 @@
 import gsap from "gsap";
 import { Bodies, Body, Composite, Engine } from "matter-js";
+import { Graphics } from "pixi.js";
 
 import { CATEGORIES, COLORS } from "../utils/constants";
 import { PlatformConfig, PlatformOrientation } from "../types/LevelConfig";
@@ -12,6 +13,7 @@ export interface PlatformMove {
 
 export class Platform {
   public body: Body;
+  public view: Graphics;
   public x: number;
   public y: number;
   public width: number;
@@ -55,6 +57,20 @@ export class Platform {
       };
       this.move = move;
     }
+
+    this.view = new Graphics();
+
+    if (this.orientation === "horizontal") {
+      this.view
+        .rect(-this.width / 2, -this.height / 2, this.width, this.height)
+        .fill(COLORS["Flame"]);
+    } else {
+      this.view
+        .rect(-this.height / 2, -this.width / 2, this.height, this.width)
+        .fill(COLORS["Flame"]);
+    }
+
+    this.view.position.set(this.x, this.y);
   }
 
   setupPhysics(engine: Engine): void {
@@ -76,30 +92,9 @@ export class Platform {
             x: this.x,
             y: this.y,
           });
+          this.view.position.set(this.x, this.y);
         },
       });
     }
-  }
-
-  draw(ctx: CanvasRenderingContext2D): void {
-    ctx.fillStyle = COLORS["Flame"];
-    ctx.beginPath();
-
-    if (this.orientation === "horizontal") {
-      ctx.rect(
-        this.x - this.width / 2,
-        this.y - this.height / 2,
-        this.width,
-        this.height
-      );
-    } else {
-      ctx.rect(
-        this.x - this.height / 2,
-        this.y - this.width / 2,
-        this.height,
-        this.width
-      );
-    }
-    ctx.fill();
   }
 }

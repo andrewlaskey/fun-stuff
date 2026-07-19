@@ -3,6 +3,8 @@ import { ref, onMounted } from "vue";
 import { usePixiApp, useVideoFilters, useVideoSprite } from '../composables/pixi';
 import { useWebcam } from '../composables/webcam';
 import { useHandTracking } from '../composables/bodypose';
+import { useGame } from '../composables/game';
+import { levels } from '../data/Levels';
 import Scoreboard from "./Scoreboard.vue";
 
 const { pixiContainer, initPixiApp } = usePixiApp();
@@ -17,16 +19,18 @@ const { leftHand, rightHand, startTracking } = useHandTracking({
 const width = 800;
 const height = 600;
 
+const game = useGame({ width, height });
+
 onMounted(async () => {
   try {
     // Initialize PixiJS
     const pixiApp = await initPixiApp(width, height);
-    
+
     // Start webcam
     const videoElement = await startWebcam({
       video: { width, height }
     });
-    
+
     // Create video sprite with vintage filter
     createVideoSprite(videoElement, pixiApp, {
       width,
@@ -35,6 +39,9 @@ onMounted(async () => {
     });
 
     await startTracking(videoElement);
+
+    await game.setup(pixiApp, levels);
+    game.start(leftHand, rightHand);
   } catch (error) {
     console.error('Setup failed:', error);
   }
@@ -43,9 +50,12 @@ onMounted(async () => {
 
 <template>
   <div class="app-container">
-    <p>{{ leftHand?.x }}, {{ leftHand?.y }}</p>
-    <p>{{ rightHand?.x }}, {{ rightHand?.y }}</p>
-    <Scoreboard :alive="0" :saved="0" :level="0" />
+    <Scoreboard
+      :alive="game.uiState.aliveCount"
+      :total="game.uiState.totalCount"
+      :saved="game.uiState.savedCount"
+      :level="game.uiState.level"
+    />
     <div ref="pixiContainer" class="pixi-container"></div>
     <!-- Hide the video element since we're displaying it through PixiJS -->
     <video

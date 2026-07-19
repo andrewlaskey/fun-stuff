@@ -10,8 +10,18 @@ import {
   Events,
   Collision,
 } from "matter-js";
+import { Container, Graphics, GraphicsPath } from "pixi.js";
 
 import { CATEGORIES } from "../utils/constants";
+
+// Same path data as assets/melling_1.svg and assets/mellings_2.svg, built as
+// vector shapes rather than rasterized+tinted textures: a tint multiplies a
+// texture's existing pixel color, and these SVGs are filled solid black, so
+// tinting them would always stay black.
+const POSE_1_PATH =
+  "m 7.9961557,0.11687958 c -3.193488,0.21848 -5.020055,3.40777462 -6.249225,6.08369862 -1.241526,2.702826 1.566152,4.8455598 1.445144,7.4123018 -0.05894,1.250185 -4.345761,3.70723 -0.510009,4.168138 2.821595,0.339045 4.731425,-2.956736 6.949902,-2.792968 2.6257083,0.19383 3.9125813,0.733696 6.5218093,1.922961 1.738373,0.792336 7.461435,2.104476 4.644794,-1.173281 -1.199928,-1.396368 -1.695713,-1.0877 0.320446,-1.515907 2.593371,-0.550797 3.594372,-3.253315 3.938455,-5.7059628 0.383006,-2.730108 -2.101675,-5.242414 -4.752322,-5.250535 -2.564899,-0.0079 -3.492663,0.234457 -6.599636,-0.755117 C 11.716,1.8765469 10.158754,0.18415998 7.9961557,0.11687958 Z";
+const POSE_2_PATH =
+  "M 5.8013399,0.90763134 C 3.2312202,1.4187673 1.6454834,4.6303743 1.2739083,7.1016943 0.94957938,9.2588013 4.3666002,11.181922 4.2012471,13.00431 c -0.1561953,1.721498 0.8782646,6.199034 3.1933307,3.784855 1.2762864,-1.330928 0.5702065,-3.611324 3.5068202,-2.951501 1.924979,0.432523 4.654713,-1.668556 4.63473,1.410533 -0.02026,3.120178 3.708524,3.259071 3.011565,-0.838574 -0.456428,-2.683485 4.020536,-1.092568 5.509232,-3.271654 1.626264,-2.3804447 0.877889,-4.8725967 -0.650246,-6.9190657 -1.759351,-2.35611 -5.819561,1.233129 -7.495674,-0.477193 -1.822071,-1.859253 -4.283881,-3.36406096 -6.9094847,-3.24882196 -1.03414,0.04539 -2.4040119,-0.391825 -3.2001804,0.414743 z";
 
 export type MellingState = "alive" | "dying" | "dead" | "goal";
 export class Melling {
@@ -20,6 +30,8 @@ export class Melling {
   public color: string;
   public state: MellingState = "alive";
   public isOnGround = true; // always move horizontally for now regardless if on ground. it looks better
+
+  public view: Container;
 
   private width = 25;
   private height = 18;
@@ -34,6 +46,10 @@ export class Melling {
   private animationTimer = 0;
   private poseDuration = 0.25;
   private currentPose = 0;
+
+  private poseContainer: Container;
+  private poseGraphics: [Graphics, Graphics];
+  private deathContainer: Container;
 
   constructor(x: number, y: number, color = "#DB3069") {
     this.body = Bodies.rectangle(x, y, this.width, this.height, {
@@ -58,94 +74,84 @@ export class Melling {
       }
     );
     this.color = color;
+
+    this.view = new Container();
+    this.view.position.set(x, y);
+
+    this.poseContainer = new Container();
+    this.poseContainer.position.set(
+      -this.width / 2 - 1.2521839,
+      -this.height / 2 - 0.4147566
+    );
+
+    const pose1 = new Graphics()
+      .path(new GraphicsPath(POSE_1_PATH))
+      .fill(this.color);
+    const pose2 = new Graphics()
+      .path(new GraphicsPath(POSE_2_PATH))
+      .fill(this.color);
+    pose2.visible = false;
+    this.poseGraphics = [pose1, pose2];
+
+    const eyes = new Graphics()
+      .circle(this.width * 0.75, this.height * 0.4, 1)
+      .circle(this.width * 0.85, this.height * 0.4, 1)
+      .fill(0x000000);
+
+    this.poseContainer.addChild(pose1, pose2, eyes);
+
+    this.deathContainer = new Container();
+    this.deathContainer.visible = false;
+    for (let i = 0; i < 4; i++) {
+      this.deathContainer.addChild(
+        new Graphics().rect(0, 0, 5, 5).fill(this.color)
+      );
+    }
+
+    this.view.addChild(this.poseContainer, this.deathContainer);
   }
 
   getBodies(): Body[] {
     return [this.body, this.groundSensor];
   }
 
-  pose1(ctx: CanvasRenderingContext2D) {
-    const path = new Path2D(
-      "m 7.9961557,0.11687958 c -3.193488,0.21848 -5.020055,3.40777462 -6.249225,6.08369862 -1.241526,2.702826 1.566152,4.8455598 1.445144,7.4123018 -0.05894,1.250185 -4.345761,3.70723 -0.510009,4.168138 2.821595,0.339045 4.731425,-2.956736 6.949902,-2.792968 2.6257083,0.19383 3.9125813,0.733696 6.5218093,1.922961 1.738373,0.792336 7.461435,2.104476 4.644794,-1.173281 -1.199928,-1.396368 -1.695713,-1.0877 0.320446,-1.515907 2.593371,-0.550797 3.594372,-3.253315 3.938455,-5.7059628 0.383006,-2.730108 -2.101675,-5.242414 -4.752322,-5.250535 -2.564899,-0.0079 -3.492663,0.234457 -6.599636,-0.755117 C 11.716,1.8765469 10.158754,0.18415998 7.9961557,0.11687958 Z"
-    );
-    ctx.fillStyle = this.color;
-    ctx.fill(path);
-  }
+  render(deltaTime: number): void {
+    this.view.position.set(this.body.position.x, this.body.position.y);
 
-  pose2(ctx: CanvasRenderingContext2D) {
-    const path = new Path2D(
-      "M 5.8013399,0.90763134 C 3.2312202,1.4187673 1.6454834,4.6303743 1.2739083,7.1016943 0.94957938,9.2588013 4.3666002,11.181922 4.2012471,13.00431 c -0.1561953,1.721498 0.8782646,6.199034 3.1933307,3.784855 1.2762864,-1.330928 0.5702065,-3.611324 3.5068202,-2.951501 1.924979,0.432523 4.654713,-1.668556 4.63473,1.410533 -0.02026,3.120178 3.708524,3.259071 3.011565,-0.838574 -0.456428,-2.683485 4.020536,-1.092568 5.509232,-3.271654 1.626264,-2.3804447 0.877889,-4.8725967 -0.650246,-6.9190657 -1.759351,-2.35611 -5.819561,1.233129 -7.495674,-0.477193 -1.822071,-1.859253 -4.283881,-3.36406096 -6.9094847,-3.24882196 -1.03414,0.04539 -2.4040119,-0.391825 -3.2001804,0.414743 z"
-    );
-    ctx.fillStyle = this.color;
-    ctx.fill(path);
-  }
-
-  eyes(ctx: CanvasRenderingContext2D) {
-    ctx.fillStyle = "#000000";
-
-    ctx.beginPath();
-    ctx.arc(this.width * 0.75, this.height * 0.4, 1, 0, Math.PI * 2, true);
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.arc(this.width * 0.85, this.height * 0.4, 1, 0, Math.PI * 2, true);
-    ctx.fill();
-  }
-
-  draw(ctx: CanvasRenderingContext2D, deltaTime: number) {
     this.animationTimer += deltaTime;
 
     // Switch pose every poseDuration seconds
     if (this.animationTimer >= this.poseDuration) {
       this.animationTimer = 0;
       this.currentPose = (this.currentPose + 1) % 2; // Toggle between 0 and 1
+      this.poseGraphics[0].visible = this.currentPose === 0;
+      this.poseGraphics[1].visible = this.currentPose === 1;
     }
 
-    ctx.fillStyle = this.color;
-
     if (this.state === "alive") {
-      ctx.save();
-      ctx.translate(
-        this.body.position.x - this.width / 2,
-        this.body.position.y - this.height / 2
+      this.view.visible = true;
+      this.poseContainer.visible = true;
+      this.deathContainer.visible = false;
+
+      this.poseContainer.scale.set(
+        this.scaleFactor * this.direction,
+        this.scaleFactor
       );
-      ctx.translate(-1.2521839, -0.4147566);
-      ctx.scale(this.scaleFactor * this.direction, this.scaleFactor);
-
-      if (this.currentPose === 0) {
-        this.pose1(ctx);
-      } else {
-        this.pose2(ctx);
-      }
-
-      this.eyes(ctx);
-
-      ctx.restore();
     } else if (this.state === "dying") {
+      this.view.visible = true;
+      this.poseContainer.visible = false;
+      this.deathContainer.visible = true;
+
       const w = (this.width / 2) * this.particleFactor;
       const h = (this.height / 2) * this.particleFactor;
-      const topLeftCorner = {
-        x: this.body.position.x - w,
-        y: this.body.position.y - h,
-      };
-      const topRightCorner = {
-        x: this.body.position.x + w,
-        y: this.body.position.y - h,
-      };
-      const bottomLeftCorner = {
-        x: this.body.position.x - w,
-        y: this.body.position.y + h,
-      };
-      const bottomRightCorner = {
-        x: this.body.position.x + w,
-        y: this.body.position.y + h,
-      };
-      ctx.beginPath();
-      ctx.rect(topRightCorner.x, topRightCorner.y, 5, 5);
-      ctx.rect(topLeftCorner.x, topLeftCorner.y, 5, 5);
-      ctx.rect(bottomRightCorner.x, bottomRightCorner.y, 5, 5);
-      ctx.rect(bottomLeftCorner.x, bottomLeftCorner.y, 5, 5);
-      ctx.fill();
+      const [topRight, topLeft, bottomRight, bottomLeft] =
+        this.deathContainer.children;
+      topRight.position.set(w, -h);
+      topLeft.position.set(-w, -h);
+      bottomRight.position.set(w, h);
+      bottomLeft.position.set(-w, h);
+    } else {
+      this.view.visible = false;
     }
   }
 

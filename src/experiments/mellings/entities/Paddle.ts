@@ -1,4 +1,5 @@
 import { Bodies, Body, Composite, Engine } from "matter-js";
+import { Graphics } from "pixi.js";
 
 import { CATEGORIES } from "../utils/constants";
 import { lerp } from "../../../utils/lerp";
@@ -15,6 +16,7 @@ interface Keypoint extends Point {
 
 export class Paddle {
   public body: Body;
+  public view: Graphics;
 
   private paddleVerticalOffset = 60;
   private smoothness = 0.2; // Lower = smoother/slower, Higher = more responsive
@@ -33,22 +35,14 @@ export class Paddle {
         mask: CATEGORIES.MELLING,
       },
     });
+
+    this.view = new Graphics()
+      .rect(-this.width / 2, -this.height / 2, this.width, this.height)
+      .fill(this.color);
   }
 
   setupPhysics(engine: Engine): void {
     Composite.add(engine.world, [this.body]);
-  }
-
-  draw(ctx: CanvasRenderingContext2D): void {
-    ctx.fillStyle = this.color;
-    ctx.beginPath();
-    ctx.rect(
-      this.body.position.x - this.width / 2,
-      this.body.position.y - this.height / 2,
-      this.width,
-      this.height
-    );
-    ctx.fill();
   }
 
   update(deltaTime: number, pose: Keypoint | undefined): void {
@@ -69,6 +63,7 @@ export class Paddle {
       };
 
       Body.setPosition(this.body, newPosition);
+      this.view.position.set(newPosition.x, newPosition.y);
     }
   }
 
