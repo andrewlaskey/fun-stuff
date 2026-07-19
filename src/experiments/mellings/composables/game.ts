@@ -1,4 +1,4 @@
-import { ref, reactive, Ref } from "vue";
+import { ref, reactive, onUnmounted, Ref } from "vue";
 import {
   Bodies,
   Body,
@@ -7,7 +7,7 @@ import {
   Engine,
   Events,
 } from "matter-js";
-import { Application as PixiApplication } from "pixi.js";
+import { Application as PixiApplication, TickerCallback } from "pixi.js";
 import { draw, group } from "radash";
 import { CATEGORIES, COLORS } from "../utils/constants";
 import { Level } from "../entities/Level";
@@ -68,7 +68,18 @@ export function useGame(options: GameOptions = {}) {
   let rightPaddle: Paddle;
   let currentLevelIndex = 0;
 
+  let spawnTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  let spawnIntervalId: ReturnType<typeof setInterval> | null = null;
+  let tickerCallback: TickerCallback<unknown> | null = null;
+
   const currentLevel = () => levels[currentLevelIndex];
+
+  onUnmounted(() => {
+    if (spawnTimeoutId) clearTimeout(spawnTimeoutId);
+    if (spawnIntervalId) clearInterval(spawnIntervalId);
+    if (tickerCallback) pixiApp?.ticker?.remove(tickerCallback);
+    state.value = "pause";
+  });
 
   const setup = async (
     pixi: PixiApplication,
@@ -109,13 +120,14 @@ export function useGame(options: GameOptions = {}) {
 
     state.value = "playing";
 
-    setTimeout(() => {
+    spawnTimeoutId = setTimeout(() => {
       spawnMellings();
     }, 3 * 1000);
 
-    pixiApp.ticker.add((ticker) => {
+    tickerCallback = (ticker) => {
       gameLoop(ticker.deltaMS / 1000, leftHand, rightHand);
-    });
+    };
+    pixiApp.ticker.add(tickerCallback);
   };
 
   const gameLoop = (
@@ -147,8 +159,8 @@ export function useGame(options: GameOptions = {}) {
   const spawnMellings = (): void => {
     let count = 0;
 
-    const interval = setInterval(() => {
-      if (!pixiApp) return;
+    spawnIntervalId = setInterval(() => {
+      if (!pixiApp || !spawnIntervalId) return;
 
       if (count < config.totalMellings) {
         const level = currentLevel();
@@ -162,7 +174,8 @@ export function useGame(options: GameOptions = {}) {
         pixiApp.stage.addChild(melling.view);
         count++;
       } else {
-        clearInterval(interval);
+        clearInterval(spawnIntervalId);
+        spawnIntervalId = null;
       }
     }, config.addMellingIntervalMs);
   };
