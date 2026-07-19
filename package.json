@@ -7,18 +7,24 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@types/lodash": "^4.17.15",
     "@types/matter-js": "^0.19.8",
     "@types/p5": "^1.7.6",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^4.7.0",
+    "@vue/test-utils": "^2.4.11",
+    "jsdom": "^29.1.1",
     "vite": "^5.4.11",
     "vitest": "^2.1.8"
   },

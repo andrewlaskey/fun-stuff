@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, ref, watch, Ref } from "vue";
+import { ref, watch, Ref } from "vue";
 import { gsap } from "gsap";
 
 interface ScoreboardProps {
