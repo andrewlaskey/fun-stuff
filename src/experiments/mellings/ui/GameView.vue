@@ -4,6 +4,7 @@ import { usePixiApp, useVideoFilters, useVideoSprite } from '../composables/pixi
 import { useWebcam } from '../composables/webcam';
 import { useHandTracking } from '../composables/bodypose';
 import { useGame } from '../composables/game';
+import { useSettings } from '../composables/settings';
 import { levels } from '../data/Levels';
 import Scoreboard from "./Scoreboard.vue";
 
@@ -11,12 +12,13 @@ const emit = defineEmits<{ back: [] }>();
 
 const { pixiContainer, initPixiApp } = usePixiApp();
 const { video, startWebcam } = useWebcam();
-const { createVideoSprite } = useVideoSprite();
+const { createVideoSprite, videoSprite } = useVideoSprite();
 const { presetFilters } = useVideoFilters();
 const { leftHand, rightHand, startTracking } = useHandTracking({
   confidenceThreshold: 0.05,
   flipped: true
 });
+const { showCameraFeed } = useSettings();
 
 const width = 800;
 const height = 600;
@@ -39,6 +41,11 @@ onMounted(async () => {
       height,
       filters: presetFilters.vintage(),
     });
+
+    const sprite = videoSprite();
+    if (sprite) {
+      sprite.visible = showCameraFeed.value;
+    }
 
     await startTracking(videoElement);
 

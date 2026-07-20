@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { onMounted, watch } from "vue";
+import { Graphics } from 'pixi.js';
 import { usePixiApp, useVideoFilters, useVideoSprite } from '../composables/pixi';
 import { useWebcam } from '../composables/webcam';
-import { useHandTracking } from '../composables/bodypose';
+import { useHandTracking, type Keypoint } from '../composables/bodypose';
+import { useSettings } from '../composables/settings';
+import { COLORS } from '../utils/constants';
 
 const emit = defineEmits<{ back: [] }>();
 
@@ -14,17 +17,57 @@ const { leftHand, rightHand, startTracking } = useHandTracking({
   confidenceThreshold: 0.05,
   flipped: true
 });
+const { showCameraFeed } = useSettings();
 
 const width = 800;
 const height = 600;
 
-const showCamera = ref(true);
-
-watch(showCamera, (visible) => {
+watch(showCameraFeed, (visible) => {
   const sprite = videoSprite();
   if (sprite) {
     sprite.visible = visible;
   }
+});
+
+let leftHandMarker: Graphics | null = null;
+let rightHandMarker: Graphics | null = null;
+
+function createHandMarker(color: string): Graphics {
+  const marker = new Graphics()
+    .circle(0, 0, 16)
+    .stroke({ width: 3, color })
+    .circle(0, 0, 5)
+    .fill(color);
+  marker.visible = false;
+  return marker;
+}
+
+function positionHandMarker(marker: Graphics | null, hand: Keypoint | null) {
+  if (!marker) return;
+
+  const sprite = videoSprite();
+  const videoEl = video.value;
+
+  if (!hand || !sprite || !videoEl || !videoEl.videoWidth || !videoEl.videoHeight) {
+    marker.visible = false;
+    return;
+  }
+
+  // Sprite may be hidden (camera feed toggled off) while tracking keeps running,
+  // and Pixi's getBounds() returns an empty rect for invisible objects — so the
+  // on-screen position is derived from the sprite's transform directly instead.
+  // The anchor is centered, so the AABB is symmetric regardless of scale sign
+  // (used for mirroring), hence Math.abs() here.
+  marker.position.set(
+    sprite.x + (hand.x - videoEl.videoWidth / 2) * Math.abs(sprite.scale.x),
+    sprite.y + (hand.y - videoEl.videoHeight / 2) * Math.abs(sprite.scale.y)
+  );
+  marker.visible = true;
+}
+
+watch([leftHand, rightHand], ([left, right]) => {
+  positionHandMarker(leftHandMarker, left);
+  positionHandMarker(rightHandMarker, right);
 });
 
 onMounted(async () => {
@@ -43,8 +86,12 @@ onMounted(async () => {
 
     const sprite = videoSprite();
     if (sprite) {
-      sprite.visible = showCamera.value;
+      sprite.visible = showCameraFeed.value;
     }
+
+    leftHandMarker = createHandMarker(COLORS["Hunyadi yellow"]);
+    rightHandMarker = createHandMarker(COLORS["Vermillion"]);
+    pixiApp.stage.addChild(leftHandMarker, rightHandMarker);
 
     await startTracking(videoElement);
   } catch (error) {
@@ -57,8 +104,8 @@ onMounted(async () => {
   <div class="options-view">
     <div class="toolbar">
       <button type="button" @click="emit('back')">← Back to Menu</button>
-      <button type="button" @click="showCamera = !showCamera">
-        {{ showCamera ? 'Hide' : 'Show' }} Camera Feed
+      <button type="button" @click="showCameraFeed = !showCameraFeed">
+        {{ showCameraFeed ? 'Hide' : 'Show' }} Camera Feed
       </button>
     </div>
 
