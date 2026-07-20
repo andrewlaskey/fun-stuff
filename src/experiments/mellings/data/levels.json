@@ -87,6 +87,43 @@
         },
         "width": 300,
         "orientation": "horizontal",
+        "isDynamic": true,
+        "moveSpeed": 4,
+        "moveDelta": {
+          "x": 200,
+          "y": 0
+        }
+      }
+    ]
+  },
+  {
+    "id": "cfd6953c-51cb-4ca1-90f5-e1efd33f6e5a",
+    "name": "Level 4",
+    "startPosition": {
+      "x": 39.9921875,
+      "y": 215.83984375
+    },
+    "goalPosition": {
+      "x": 743.3984375,
+      "y": 275.24609375
+    },
+    "platforms": [
+      {
+        "position": {
+          "x": 701.2734375,
+          "y": 311.140625
+        },
+        "width": 200,
+        "orientation": "horizontal",
+        "isDynamic": false
+      },
+      {
+        "position": {
+          "x": 113.9765625,
+          "y": 309.25
+        },
+        "width": 225,
+        "orientation": "horizontal",
         "isDynamic": false
       }
     ]

@@ -64,17 +64,21 @@ export function useGame(options: GameOptions = {}) {
     addMellingIntervalMs: options?.addMellingIntervalMs ?? 500,
   };
 
+  let levelConfigs: LevelConfig[] = [];
   let levels: Level[] = [];
   let mellings: Melling[] = [];
   let leftPaddle: Paddle;
   let rightPaddle: Paddle;
   let currentLevelIndex = 0;
+  let currentAttemptTotal = config.totalMellings;
 
   let spawnTimeoutId: ReturnType<typeof setTimeout> | null = null;
   let spawnIntervalId: ReturnType<typeof setInterval> | null = null;
   let tickerCallback: TickerCallback<unknown> | null = null;
 
   const currentLevel = () => levels[currentLevelIndex];
+
+  const hasNextLevel = (): boolean => currentLevelIndex + 1 < levels.length;
 
   onUnmounted(() => {
     if (spawnTimeoutId) clearTimeout(spawnTimeoutId);
@@ -92,10 +96,12 @@ export function useGame(options: GameOptions = {}) {
 
     addWorldBounds();
 
+    levelConfigs = levelData;
     levels = levelData.map((levelConfig) => new Level(levelConfig));
     currentLevelIndex = 0;
+    currentAttemptTotal = config.totalMellings;
     uiState.level = currentLevelIndex;
-    uiState.totalCount = config.totalMellings;
+    uiState.totalCount = currentAttemptTotal;
 
     const paddleWidth = 200;
     const paddleHeight = 12;
@@ -166,7 +172,7 @@ export function useGame(options: GameOptions = {}) {
     spawnIntervalId = setInterval(() => {
       if (!pixiApp || !spawnIntervalId) return;
 
-      if (count < config.totalMellings) {
+      if (count < currentAttemptTotal) {
         const level = currentLevel();
         const x = Common.random(
           level.startLocation.x,
@@ -252,6 +258,10 @@ export function useGame(options: GameOptions = {}) {
 
   const checkEndCondition = (): void => {
     if (mellings.length === 0) return;
+    // Don't resolve win/lose until every melling for this attempt has
+    // spawned - an early batch dying out shouldn't end the round while
+    // more are still queued to appear.
+    if (mellings.length < currentAttemptTotal) return;
 
     const mellingStates = group(mellings, (m) => m.state);
 
@@ -260,11 +270,91 @@ export function useGame(options: GameOptions = {}) {
     }
   };
 
+  const clearSpawning = (): void => {
+    if (spawnTimeoutId) {
+      clearTimeout(spawnTimeoutId);
+      spawnTimeoutId = null;
+    }
+    if (spawnIntervalId) {
+      clearInterval(spawnIntervalId);
+      spawnIntervalId = null;
+    }
+  };
+
+  const startLevelAttempt = (levelIndex: number, total: number): void => {
+    if (!pixiApp) return;
+
+    clearSpawning();
+
+    for (const melling of mellings) {
+      pixiApp.stage.removeChild(melling.view);
+      melling.view.destroy({ children: true });
+    }
+    mellings = [];
+
+    const previousLevel = currentLevel();
+    if (previousLevel) {
+      pixiApp.stage.removeChild(previousLevel.view);
+      previousLevel.teardown(engine);
+    }
+
+    currentLevelIndex = levelIndex;
+    currentAttemptTotal = total;
+
+    // Rebuild from the original config rather than reusing the torn-down
+    // Level - its Pixi view was just destroy()'d, and Pixi doesn't support
+    // reviving a destroyed Container.
+    const freshLevel = new Level(levelConfigs[levelIndex]);
+    levels[levelIndex] = freshLevel;
+
+    freshLevel.setupPhysics(engine, mellings);
+    // Insert directly below the paddles, wherever they currently sit in the
+    // stage - not a hardcoded index 0, which would land the level below
+    // the video feed sprite that GameView adds to the stage before setup()
+    // ever runs.
+    pixiApp.stage.addChildAt(
+      freshLevel.view,
+      pixiApp.stage.getChildIndex(leftPaddle.view)
+    );
+
+    uiState.level = currentLevelIndex;
+    uiState.totalCount = currentAttemptTotal;
+    uiState.spawnedCount = 0;
+    uiState.aliveCount = 0;
+    uiState.deadCount = 0;
+    uiState.savedCount = 0;
+
+    state.value = "playing";
+
+    spawnTimeoutId = setTimeout(() => {
+      spawnMellings();
+    }, 3 * 1000);
+  };
+
+  const retry = (): void => {
+    if (state.value !== "lose") return;
+    startLevelAttempt(currentLevelIndex, currentAttemptTotal);
+  };
+
+  const nextLevel = (): void => {
+    if (state.value !== "win" || !hasNextLevel()) return;
+    const survivors = mellings.filter((m) => m.state === "goal").length;
+    startLevelAttempt(currentLevelIndex + 1, survivors);
+  };
+
+  const restartGame = (): void => {
+    startLevelAttempt(0, config.totalMellings);
+  };
+
   return {
     isInitialized,
     state,
     uiState,
+    hasNextLevel,
     setup,
     start,
+    retry,
+    nextLevel,
+    restartGame,
   };
 }

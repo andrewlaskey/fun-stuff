@@ -69,4 +69,14 @@ export class Level {
       platform.setupPhysics(engine);
     }
   }
+
+  teardown(engine: Engine): void {
+    Composite.remove(engine.world, [this.goal]);
+
+    for (const platform of this.platforms) {
+      platform.teardown(engine);
+    }
+
+    this.view.destroy({ children: true });
+  }
 }

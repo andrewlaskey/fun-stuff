@@ -18,6 +18,7 @@ export class Platform {
   public height: number = PLATFORM_HEIGHT;
   public orientation: PlatformOrientation;
   private move: PlatformMove | undefined | null;
+  private tween?: gsap.core.Tween;
 
   constructor(config: PlatformConfig) {
     this.x = config.position.x;
@@ -61,7 +62,7 @@ export class Platform {
       const finalX = this.x + this.move.deltaX;
       const finalY = this.y + this.move.deltaY;
 
-      gsap.to(this, {
+      this.tween = gsap.to(this, {
         x: finalX,
         y: finalY,
         repeat: -1,
@@ -77,5 +78,10 @@ export class Platform {
         },
       });
     }
+  }
+
+  teardown(engine: Engine): void {
+    this.tween?.kill();
+    Composite.remove(engine.world, [this.body]);
   }
 }

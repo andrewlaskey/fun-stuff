@@ -74,7 +74,23 @@ onMounted(async () => {
       :saved="game.uiState.savedCount"
       :level="game.uiState.level"
     />
-    <div ref="pixiContainer" class="pixi-container"></div>
+    <div class="pixi-container-wrapper">
+      <div ref="pixiContainer" class="pixi-container"></div>
+      <div v-if="game.state.value === 'lose'" class="end-overlay">
+        <p class="end-message">Game Over</p>
+        <button type="button" @click="game.retry()">Retry</button>
+      </div>
+      <div v-else-if="game.state.value === 'win'" class="end-overlay">
+        <template v-if="game.hasNextLevel()">
+          <p class="end-message">Level Complete!</p>
+          <button type="button" @click="game.nextLevel()">Continue</button>
+        </template>
+        <template v-else>
+          <p class="end-message">You Win!</p>
+          <button type="button" @click="game.restartGame()">Play Again</button>
+        </template>
+      </div>
+    </div>
     <!-- Hide the video element since we're displaying it through PixiJS -->
     <video
       ref="video"
@@ -100,8 +116,45 @@ onMounted(async () => {
   margin-bottom: 8px;
 }
 
+.pixi-container-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
 .pixi-container {
   border: 2px solid #ccc;
   display: inline-block;
+}
+
+.end-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.end-message {
+  color: #fff;
+  font-size: 2.5em;
+  font-weight: bold;
+  margin: 0;
+}
+
+.end-overlay button {
+  font-size: 1.2em;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #3772FF;
+  color: #fff;
+}
+
+.end-overlay button:hover {
+  background-color: #2a5adf;
 }
 </style>
