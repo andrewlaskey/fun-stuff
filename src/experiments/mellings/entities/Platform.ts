@@ -4,12 +4,10 @@ import { Graphics } from "pixi.js";
 
 import { CATEGORIES, COLORS } from "../utils/constants";
 import { PlatformConfig, PlatformOrientation } from "../types/LevelConfig";
+import { drawPlatform, PLATFORM_HEIGHT } from "../utils/platformGraphics";
+import { getPlatformMove, PlatformMove } from "../utils/platformMove";
 
-export interface PlatformMove {
-  deltaX: number;
-  deltaY: number;
-  duration: number;
-}
+export type { PlatformMove } from "../utils/platformMove";
 
 export class Platform {
   public body: Body;
@@ -17,7 +15,7 @@ export class Platform {
   public x: number;
   public y: number;
   public width: number;
-  public height: number = 15;
+  public height: number = PLATFORM_HEIGHT;
   public orientation: PlatformOrientation;
   private move: PlatformMove | undefined | null;
 
@@ -49,27 +47,10 @@ export class Platform {
       );
     }
 
-    if (config.isDynamic) {
-      const move: PlatformMove = {
-        deltaX: config.moveDelta?.x ?? 0,
-        deltaY: config.moveDelta?.y ?? 0,
-        duration: config.moveSpeed ?? 0,
-      };
-      this.move = move;
-    }
+    this.move = getPlatformMove(config);
 
     this.view = new Graphics();
-
-    if (this.orientation === "horizontal") {
-      this.view
-        .rect(-this.width / 2, -this.height / 2, this.width, this.height)
-        .fill(COLORS["Flame"]);
-    } else {
-      this.view
-        .rect(-this.height / 2, -this.width / 2, this.height, this.width)
-        .fill(COLORS["Flame"]);
-    }
-
+    drawPlatform(this.view, this.width, this.orientation, COLORS["Flame"]);
     this.view.position.set(this.x, this.y);
   }
 

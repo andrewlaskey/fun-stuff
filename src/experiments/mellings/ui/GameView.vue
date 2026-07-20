@@ -5,10 +5,14 @@ import { useWebcam } from '../composables/webcam';
 import { useHandTracking } from '../composables/bodypose';
 import { useGame } from '../composables/game';
 import { useSettings } from '../composables/settings';
-import { levels } from '../data/Levels';
+import levelsData from '../data/levels.json';
+import type { LevelConfig } from '../types/LevelConfig';
 import Scoreboard from "./Scoreboard.vue";
 
+const props = defineProps<{ levels?: LevelConfig[] }>();
 const emit = defineEmits<{ back: [] }>();
+
+const levels = props.levels && props.levels.length > 0 ? props.levels : (levelsData as LevelConfig[]);
 
 const { pixiContainer, initPixiApp } = usePixiApp();
 const { video, startWebcam } = useWebcam();

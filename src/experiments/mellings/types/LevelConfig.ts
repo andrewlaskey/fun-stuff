@@ -15,6 +15,8 @@ export interface PlatformConfig {
 }
 
 export interface LevelConfig {
+    id: string;
+    name: string;
     goalPosition: Position;
     startPosition: Position;
     platforms: PlatformConfig[];
