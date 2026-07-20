@@ -145,6 +145,21 @@ export function useLevelEditor() {
     }
   }
 
+  function duplicateLevel(id: string): void {
+    const index = levels.value.findIndex((level) => level.id === id);
+    if (index === -1) return;
+
+    // JSON round-trip instead of structuredClone(): the source level is a
+    // Vue reactive Proxy, which structuredClone() can't clone.
+    const copy: LevelConfig = {
+      ...JSON.parse(JSON.stringify(levels.value[index])),
+      id: crypto.randomUUID(),
+      name: `${levels.value[index].name} (Copy)`,
+    };
+
+    levels.value.splice(index + 1, 0, copy);
+  }
+
   function deleteLevel(id: string): void {
     const index = levels.value.findIndex((level) => level.id === id);
     if (index === -1) return;
@@ -174,6 +189,7 @@ export function useLevelEditor() {
     createLevel,
     selectLevel,
     closeLevel,
+    duplicateLevel,
     deleteLevel,
     renameLevel,
     updateActiveLevel,

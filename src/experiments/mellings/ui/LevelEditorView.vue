@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, onUnmounted } from 'vue';
+import draggable from 'vuedraggable';
 import { useLevelEditor } from '../composables/useLevelEditor';
 import { useEditorCanvas } from '../composables/useEditorCanvas';
 import { createDefaultPlatform } from '../utils/levelDefaults';
@@ -16,6 +17,7 @@ const {
   createLevel,
   selectLevel,
   closeLevel,
+  duplicateLevel,
   deleteLevel,
   select,
   moveStart,
@@ -153,23 +155,38 @@ function onPlay() {
 
     <template v-if="!activeLevel">
       <div class="editor-header">
-        <h2>Level Editor</h2>
+        <div>
+          <h2>Level Editor</h2>
+          <span class="level-count">{{ levels.length }} level{{ levels.length === 1 ? '' : 's' }}</span>
+        </div>
         <button type="button" @click="createLevel">+ New Level</button>
       </div>
 
-      <ul class="level-list">
-        <li v-for="level in levels" :key="level.id" class="level-card">
-          <div class="level-card-info">
-            <strong>{{ level.name }}</strong>
-            <span>{{ level.platforms.length }} platform{{ level.platforms.length === 1 ? '' : 's' }}</span>
-          </div>
-          <div class="level-card-actions">
-            <button type="button" @click="selectLevel(level.id)">Edit</button>
-            <button type="button" class="danger" @click="onDelete(level.id, level.name)">Delete</button>
-          </div>
-        </li>
-        <li v-if="levels.length === 0" class="empty-state">No levels yet — create one to get started.</li>
-      </ul>
+      <draggable
+        v-model="levels"
+        item-key="id"
+        tag="ul"
+        class="level-list"
+        handle=".drag-handle"
+        :animation="150"
+        :force-fallback="true"
+      >
+        <template #item="{ element: level, index }">
+          <li class="level-card">
+            <span class="drag-handle" title="Drag to reorder">⠿</span>
+            <div class="level-card-info">
+              <strong>{{ index + 1 }}: {{ level.name }}</strong>
+              <span>{{ level.platforms.length }} platform{{ level.platforms.length === 1 ? '' : 's' }}</span>
+            </div>
+            <div class="level-card-actions">
+              <button type="button" @click="selectLevel(level.id)">Edit</button>
+              <button type="button" @click="duplicateLevel(level.id)">Duplicate</button>
+              <button type="button" class="danger" @click="onDelete(level.id, level.name)">Delete</button>
+            </div>
+          </li>
+        </template>
+      </draggable>
+      <p v-if="levels.length === 0" class="empty-state">No levels yet — create one to get started.</p>
     </template>
 
     <template v-else>
@@ -232,6 +249,12 @@ function onPlay() {
   margin-bottom: 16px;
 }
 
+.level-count {
+  display: block;
+  font-size: 0.85em;
+  color: #666;
+}
+
 .level-name-input {
   flex: 1;
   padding: 8px 10px;
@@ -271,9 +294,23 @@ function onPlay() {
   padding: 12px 16px;
   border: 1px solid #ccc;
   border-radius: 6px;
+  background-color: #fff;
+}
+
+.drag-handle {
+  cursor: grab;
+  color: #999;
+  font-size: 1.2em;
+  padding: 0 4px;
+  user-select: none;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
 }
 
 .level-card-info {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 2px;

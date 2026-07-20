@@ -97,8 +97,82 @@
     ]
   },
   {
+    "id": "719db035-dd44-411f-a580-2e177c25e772",
+    "name": "Level 5",
+    "startPosition": {
+      "x": 369.1953125,
+      "y": 49.421875
+    },
+    "goalPosition": {
+      "x": 395.203125,
+      "y": 305.33203125
+    },
+    "platforms": [
+      {
+        "position": {
+          "x": 398.21484375,
+          "y": 173.48046875
+        },
+        "width": 300,
+        "orientation": "horizontal",
+        "isDynamic": true,
+        "moveDelta": {
+          "x": 200,
+          "y": 0
+        },
+        "moveSpeed": 3
+      },
+      {
+        "position": {
+          "x": 241,
+          "y": 316.3515625
+        },
+        "width": 300,
+        "orientation": "vertical",
+        "isDynamic": true,
+        "moveDelta": {
+          "x": 0,
+          "y": 200
+        },
+        "moveSpeed": 3
+      }
+    ]
+  },
+  {
     "id": "cfd6953c-51cb-4ca1-90f5-e1efd33f6e5a",
     "name": "Level 4",
+    "startPosition": {
+      "x": 39.9921875,
+      "y": 215.83984375
+    },
+    "goalPosition": {
+      "x": 743.3984375,
+      "y": 275.24609375
+    },
+    "platforms": [
+      {
+        "position": {
+          "x": 701.2734375,
+          "y": 311.140625
+        },
+        "width": 200,
+        "orientation": "horizontal",
+        "isDynamic": false
+      },
+      {
+        "position": {
+          "x": 113.9765625,
+          "y": 309.25
+        },
+        "width": 225,
+        "orientation": "horizontal",
+        "isDynamic": false
+      }
+    ]
+  },
+  {
+    "id": "f61f5a52-2957-4ea4-bb86-e3c91ef50ca0",
+    "name": "Level 4 (Copy)",
     "startPosition": {
       "x": 39.9921875,
       "y": 215.83984375
