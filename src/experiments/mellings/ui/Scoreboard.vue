@@ -3,17 +3,32 @@ import { ref, watch, Ref } from "vue";
 import { gsap } from "gsap";
 
 interface ScoreboardProps {
-  alive: number;
+  spawned: number;
   total: number;
+  alive: number;
+  dead: number;
   saved: number;
   level: number;
 }
 
-const { alive = 0, total = 0, saved = 0, level = 0 } = defineProps<ScoreboardProps>();
+const {
+  spawned = 0,
+  total = 0,
+  alive = 0,
+  dead = 0,
+  saved = 0,
+  level = 0,
+} = defineProps<ScoreboardProps>();
+
+const spawnedRef = ref<HTMLElement>();
 const aliveRef = ref<HTMLElement>();
+const deadRef = ref<HTMLElement>();
 const savedRef = ref<HTMLElement>();
+
+const displaySpawned = ref(spawned);
 const displayAlive = ref(alive);
-const displaysaved = ref(saved);
+const displayDead = ref(dead);
+const displaySaved = ref(saved);
 
 const animateScore = async (
   newVal: number,
@@ -42,6 +57,15 @@ const animateScore = async (
 };
 
 watch(
+  () => spawned,
+  async (newVal, oldVal) => {
+    if (!spawnedRef.value || newVal === oldVal) return;
+
+    await animateScore(newVal, displaySpawned, spawnedRef.value);
+  }
+);
+
+watch(
   () => alive,
   async (newVal, oldVal) => {
     if (!aliveRef.value || newVal === oldVal) return;
@@ -51,11 +75,20 @@ watch(
 );
 
 watch(
+  () => dead,
+  async (newVal, oldVal) => {
+    if (!deadRef.value || newVal === oldVal) return;
+
+    await animateScore(newVal, displayDead, deadRef.value);
+  }
+);
+
+watch(
   () => saved,
   async (newVal, oldVal) => {
     if (!savedRef.value || newVal === oldVal) return;
 
-    await animateScore(newVal, displaysaved, savedRef.value);
+    await animateScore(newVal, displaySaved, savedRef.value);
   }
 );
 </script>
@@ -64,10 +97,12 @@ watch(
   <div class="scoreboard">
     <div class="melling-score">
       <div class="score">
-        🦔<span ref="aliveRef">{{ displayAlive }}</span>/{{ total }}
+        🦔<span ref="spawnedRef">{{ displaySpawned }}</span> / {{ total }}
       </div>
       <div class="score">
-        🏁<span ref="savedRef">{{ displaysaved }}</span>
+        🟢<span ref="aliveRef">{{ displayAlive }}</span>
+        💀<span ref="deadRef">{{ displayDead }}</span>
+        🏁<span ref="savedRef">{{ displaySaved }}</span>
       </div>
     </div>
     <span class="score">Level: {{ level }}</span>

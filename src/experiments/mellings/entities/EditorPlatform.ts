@@ -53,7 +53,7 @@ export class EditorPlatform {
       duration: move.duration,
       repeat: -1,
       yoyo: true,
-      ease: "elastic.inOut",
+      ease: move.ease,
     });
   }
 

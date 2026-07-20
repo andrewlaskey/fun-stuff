@@ -67,8 +67,10 @@ onMounted(async () => {
       <button type="button" @click="emit('back')">← Back to Menu</button>
     </div>
     <Scoreboard
-      :alive="game.uiState.aliveCount"
+      :spawned="game.uiState.spawnedCount"
       :total="game.uiState.totalCount"
+      :alive="game.uiState.aliveCount"
+      :dead="game.uiState.deadCount"
       :saved="game.uiState.savedCount"
       :level="game.uiState.level"
     />

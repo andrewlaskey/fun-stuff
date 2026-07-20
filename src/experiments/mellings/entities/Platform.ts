@@ -67,7 +67,7 @@ export class Platform {
         repeat: -1,
         duration: this.move.duration,
         yoyo: true,
-        ease: "elastic.inOut",
+        ease: this.move.ease,
         onUpdate: () => {
           Body.setPosition(this.body, {
             x: this.x,

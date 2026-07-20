@@ -46,8 +46,10 @@ export function useGame(options: GameOptions = {}) {
   const state = ref<GameState>("loading");
 
   const uiState = reactive({
-    aliveCount: 0,
+    spawnedCount: 0,
     totalCount: 0,
+    aliveCount: 0,
+    deadCount: 0,
     savedCount: 0,
     level: 0,
   });
@@ -148,7 +150,9 @@ export function useGame(options: GameOptions = {}) {
 
     checkEndCondition();
 
-    uiState.aliveCount = mellings.filter((m) => m.state !== "dead").length;
+    uiState.spawnedCount = mellings.length;
+    uiState.aliveCount = mellings.filter((m) => m.state === "alive").length;
+    uiState.deadCount = mellings.filter((m) => m.state === "dead" || m.state === "dying").length;
     uiState.savedCount = mellings.filter((m) => m.state === "goal").length;
 
     for (const melling of mellings) {

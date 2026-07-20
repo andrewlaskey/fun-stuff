@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { LevelConfig, PlatformConfig, PlatformOrientation } from '../types/LevelConfig';
+import type { LevelConfig, PlatformConfig, PlatformMoveEase, PlatformOrientation } from '../types/LevelConfig';
 import type { Selection } from '../types/EditorState';
 
 const props = defineProps<{
@@ -55,6 +55,12 @@ function updateMoveSpeed(event: Event) {
   if (props.selection?.kind !== 'platform') return;
   const moveSpeed = Number((event.target as HTMLInputElement).value);
   emit('update:platform', props.selection.index, { moveSpeed });
+}
+
+function updateMoveEase(event: Event) {
+  if (props.selection?.kind !== 'platform') return;
+  const moveEase = (event.target as HTMLSelectElement).value as PlatformMoveEase;
+  emit('update:platform', props.selection.index, { moveEase });
 }
 
 function onDelete() {
@@ -126,6 +132,15 @@ function onDelete() {
             :value="selectedPlatform.moveSpeed ?? 0"
             @change="updateMoveSpeed"
           />
+        </label>
+        <label>
+          Move easing
+          <select :value="selectedPlatform.moveEase ?? 'linear'" @change="updateMoveEase">
+            <option value="linear">Linear</option>
+            <option value="power2.inOut">Smooth</option>
+            <option value="elastic.inOut">Elastic</option>
+            <option value="bounce.inOut">Bounce</option>
+          </select>
         </label>
       </template>
 

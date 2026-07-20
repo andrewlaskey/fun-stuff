@@ -5,6 +5,8 @@ export interface Position {
 
 export type PlatformOrientation = 'horizontal' | 'vertical';
 
+export type PlatformMoveEase = 'linear' | 'power2.inOut' | 'elastic.inOut' | 'bounce.inOut';
+
 export interface PlatformConfig {
     position: Position;
     width: number;
@@ -12,6 +14,7 @@ export interface PlatformConfig {
     isDynamic: boolean;
     moveDelta?: Position;
     moveSpeed?: number;
+    moveEase?: PlatformMoveEase;
 }
 
 export interface LevelConfig {
